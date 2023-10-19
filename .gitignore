@@ -1,0 +1,11 @@
+.classpath
+.project
+.settings/
+.metadata/
+
+.DS_Store
+
+target/
+*.ser
+*.ec
+.mvn/wrapper/maven-wrapper.jar
