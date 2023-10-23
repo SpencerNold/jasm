@@ -12,6 +12,22 @@ public class TableSwitchInstruction extends Instruction {
 		super(opcode);
 	}
 	
+	public int getDefault() {
+		return def;
+	}
+	
+	public int getLow() {
+		return low;
+	}
+	
+	public int getHigh() {
+		return high;
+	}
+	
+	public int[] getOffsets() {
+		return offsets;
+	}
+	
 	@Override
 	public void setWithOffset(int offset) {
 		padding = (4 - (offset % 4)) % 4;

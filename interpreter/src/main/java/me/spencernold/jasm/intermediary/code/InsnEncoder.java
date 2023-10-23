@@ -12,6 +12,7 @@ import me.spencernold.jasm.intermediary.code.instructions.ControlFlowInstruction
 import me.spencernold.jasm.intermediary.code.instructions.GenericInstruction;
 import me.spencernold.jasm.intermediary.code.instructions.IncrementInstruction;
 import me.spencernold.jasm.intermediary.code.instructions.Instruction;
+import me.spencernold.jasm.intermediary.code.instructions.LookupSwitchInstruction;
 import me.spencernold.jasm.intermediary.code.instructions.NewArrayInstruction;
 import me.spencernold.jasm.intermediary.code.instructions.NewMultiArrayInstruction;
 import me.spencernold.jasm.intermediary.code.instructions.PushInstruction;
@@ -90,6 +91,7 @@ public class InsnEncoder {
 		initialize(Opcodes.NEWARRAY, NewArrayInstruction.class);
 		initialize(Opcodes.MULTIANEWARRAY, NewMultiArrayInstruction.class);
 		initialize(Opcodes.TABLESWITCH, TableSwitchInstruction.class);
+		initialize(Opcodes.LOOKUPSWITCH, LookupSwitchInstruction.class);
 		initialize(Opcodes.WIDE, WideInstruction.class);
 	}
 	
