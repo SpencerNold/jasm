@@ -11,6 +11,10 @@ public class InstructionTable implements ReadWriteable {
 		code = new Code();
 	}
 	
+	public Code getCode() {
+		return code;
+	}
+	
 	@Override
 	public void read(ByteBuf buf) {
 		int length = buf.readInt();
@@ -22,7 +26,7 @@ public class InstructionTable implements ReadWriteable {
 	public void write(ByteBuf buf) {
 		ByteBuf buf0 = new ByteBuf();
 		code.write(buf0);
-		byte[] data = buf.getRawBuffer();
+		byte[] data = buf0.getRawBuffer();
 		buf.writeInt(data.length);
 		buf.write(data);
 	}

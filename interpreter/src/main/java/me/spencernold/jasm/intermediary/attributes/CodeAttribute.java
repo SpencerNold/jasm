@@ -1,8 +1,9 @@
-package me.spencernold.jasm.intermediary.code;
+package me.spencernold.jasm.intermediary.attributes;
 
 import me.spencernold.jasm.ByteBuf;
 import me.spencernold.jasm.intermediary.JClass;
-import me.spencernold.jasm.intermediary.attributes.Body;
+import me.spencernold.jasm.intermediary.code.ExceptionTable;
+import me.spencernold.jasm.intermediary.code.InstructionTable;
 import me.spencernold.jasm.intermediary.pools.AttributePool;
 
 public class CodeAttribute implements Body {

@@ -6,7 +6,6 @@ import me.spencernold.jasm.exceptions.ClassFormatException;
 import me.spencernold.jasm.exceptions.ClassFormatException.Type;
 import me.spencernold.jasm.intermediary.JClass;
 import me.spencernold.jasm.intermediary.ReadWriteable;
-import me.spencernold.jasm.intermediary.code.CodeAttribute;
 import me.spencernold.jasm.intermediary.constants.Constant;
 import me.spencernold.jasm.intermediary.constants.Utf8Constant;
 

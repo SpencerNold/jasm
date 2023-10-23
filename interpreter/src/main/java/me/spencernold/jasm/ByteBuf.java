@@ -80,6 +80,6 @@ public class ByteBuf {
 	}
 	
 	public boolean isEmpty() {
-		return buffer.length != 0;
+		return buffer.length == 0;
 	}
 }

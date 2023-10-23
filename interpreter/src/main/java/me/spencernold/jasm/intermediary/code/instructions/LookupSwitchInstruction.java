@@ -2,17 +2,24 @@ package me.spencernold.jasm.intermediary.code.instructions;
 
 import me.spencernold.jasm.ByteBuf;
 
-public class FieldInstruction extends Instruction {
+public class LookupSwitchInstruction extends Instruction {
+
+	public LookupSwitchInstruction(int opcode) {
+		super(opcode);
+	}
 
 	@Override
 	public void read(ByteBuf buf) {
-		super.read(buf);
+		
+	}
+
+	@Override
+	public void write(ByteBuf buf) {
 		
 	}
 	
 	@Override
-	public void write(ByteBuf buf) {
-		super.write(buf);
-		
+	public int getSize() {
+		return 0; // TODO
 	}
 }

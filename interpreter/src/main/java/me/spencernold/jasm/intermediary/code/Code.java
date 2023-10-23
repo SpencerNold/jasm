@@ -1,10 +1,6 @@
 package me.spencernold.jasm.intermediary.code;
 
-import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
 
 import me.spencernold.jasm.ByteBuf;
 import me.spencernold.jasm.intermediary.ReadWriteable;
@@ -12,39 +8,22 @@ import me.spencernold.jasm.intermediary.code.instructions.Instruction;
 
 public class Code implements ReadWriteable {
 	
-	private static final Map<Integer, Function<ByteBuf, Instruction>> INSTRUCTION_DECODERS = new HashMap<>();
-
-	static {
-		
-	}
+	private final LinkedList<Instruction> instructions = new LinkedList<>();
+	private final InsnEncoder decoder = new InsnEncoder();
 	
-	private static void defineDecoder(int opcode, Class<? extends Instruction> clazz) {
-		INSTRUCTION_DECODERS.put(opcode, buf -> {
-			try {
-				Instruction instruction = clazz.newInstance();
-				instruction.read(buf);
-				return instruction;
-			} catch (Exception e) {
-				e.printStackTrace();
-				return null;
-			}
-		});
+	public LinkedList<Instruction> getInstructions() {
+		return instructions;
 	}
-	
-	private final List<Instruction> instructions = new LinkedList<>();
 	
 	@Override
 	public void read(ByteBuf buf) {
-		System.out.println("Bruh: " + buf.readByte());
-		while (!buf.isEmpty()) {
-			Instruction insn = new Instruction(); // Make this be the proper instruction to the proper opcode
-			insn.read(buf);
-			instructions.add(insn);
-		}
+		while (!buf.isEmpty())
+			instructions.add(decoder.decode(buf));
 	}
 
 	@Override
 	public void write(ByteBuf buf) {
-		
+		for (Instruction insn : instructions)
+			decoder.encode(buf, insn);
 	}
 }
