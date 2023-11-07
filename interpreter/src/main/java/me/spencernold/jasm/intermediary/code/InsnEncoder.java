@@ -27,7 +27,7 @@ public class InsnEncoder {
 
 	private final Map<Integer, Function<ByteBuf, Instruction>> decoders = new HashMap<>();
 	private int offset;
-	
+
 	@SuppressWarnings("deprecation")
 	public InsnEncoder() {
 		// Index based instructions
@@ -94,21 +94,36 @@ public class InsnEncoder {
 		initialize(Opcodes.LOOKUPSWITCH, LookupSwitchInstruction.class);
 		initialize(Opcodes.WIDE, WideInstruction.class);
 	}
-	
+
+	/**
+	 * Reads the opcode as an unsigned byte from the input buffer, finds a decoder
+	 * corresponding to that opcode, and returns an implementation of Instruction
+	 * and reads any additional parameters.
+	 * 
+	 * @param buf buffer containing the JVM instructions
+	 * @return implementation of Instruction corresponding to the next encoded
+	 *         instruction
+	 */
 	public Instruction decode(ByteBuf buf) {
-		int opcode = Byte.toUnsignedInt(buf.readByte());
+		int opcode = buf.readByte();
 		offset++;
 		Function<ByteBuf, Instruction> decoder = decoders.getOrDefault(opcode, getGenericDecoder(opcode));
 		Instruction instruction = decoder.apply(buf);
 		offset += instruction.getSize();
 		return instruction;
 	}
-	
+
+	/**
+	 * Encodes target instruction and writes it to the input byte buffer.
+	 * 
+	 * @param buf         byte buffer to be written to
+	 * @param instruction instruction to be encoded
+	 */
 	public void encode(ByteBuf buf, Instruction instruction) {
 		buf.writeByte(instruction.getOpcode());
 		instruction.write(buf);
 	}
-	
+
 	private void initialize(int opcode, Class<? extends Instruction> clazz) {
 		decoders.put(opcode, buf -> {
 			try {
@@ -118,13 +133,14 @@ public class InsnEncoder {
 				instruction.setWithOffset(offset);
 				instruction.read(buf);
 				return instruction;
-			} catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+			} catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException
+					| IllegalArgumentException | InvocationTargetException e) {
 				e.printStackTrace();
 				return null;
 			}
 		});
 	}
-	
+
 	private Function<ByteBuf, Instruction> getGenericDecoder(int opcode) {
 		return buf -> {
 			Instruction instruction = new GenericInstruction(opcode);

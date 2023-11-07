@@ -16,6 +16,9 @@ public class MethodPool implements ReadWriteable {
 		this.jclass = jclass;
 	}
 	
+	/**
+	 * @return LinkedList of decoded methods
+	 */
 	public LinkedList<JMethod> getMethods() {
 		return methods;
 	}

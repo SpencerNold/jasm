@@ -8,14 +8,19 @@ import me.spencernold.jasm.intermediary.JField;
 import me.spencernold.jasm.intermediary.ReadWriteable;
 
 public class FieldPool implements ReadWriteable {
-	
+
 	private final JClass jclass;
 	private final LinkedList<JField> fields = new LinkedList<>();
-	
+
 	public FieldPool(JClass jclass) {
 		this.jclass = jclass;
 	}
-	
+
+	/**
+	 * Gets the fields currently stored in the field pool.
+	 * 
+	 * @return LinkedList instance containing the fields in the pool
+	 */
 	public LinkedList<JField> getFields() {
 		return fields;
 	}

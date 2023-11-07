@@ -1,6 +1,36 @@
 package me.spencernold.jasm;
 
+import me.spencernold.jasm.utils.IntRange;
+
+/**
+ * JVM Specification opcodes and other magic values.
+ * 
+ * @author Spencer Nold
+ * @since 1.0.0
+ */
 public class Opcodes {
+	
+	// Frame types
+	public static final IntRange FRAME_TYPE_SAME = new IntRange(0, 63);
+	public static final IntRange FRAME_TYPE_SAME_LOCALS_1_STACK_ITEM = new IntRange(64, 127);
+	@Deprecated
+	public static final IntRange FRAME_TYPE_RESERVED = new IntRange(128, 246);
+	public static final IntRange FRAME_TYPE_SAME_LOCALS_1_STACK_ITEM_EXTENDED = new IntRange(247, 247);
+	public static final IntRange FRAME_TYPE_CHOP = new IntRange(248, 250);
+	public static final IntRange FRAME_TYPE_SAME_EXTENDED = new IntRange(251, 251);
+	public static final IntRange FRAME_TYPE_APPEND = new IntRange(252, 254);
+	public static final IntRange FRAME_TYPE_FULL = new IntRange(255, 255);
+	
+	// StackMapTable Tags
+	public static final int SMT_TAG_TOP = 0x00;
+	public static final int SMT_TAG_INT = 0x01;
+	public static final int SMT_TAG_FLOAT = 0x02;
+	public static final int SMT_TAG_DOUBLE = 0x03;
+	public static final int SMT_TAG_LONG = 0x04;
+	public static final int SMT_TAG_NULL = 0x05;
+	public static final int SMT_TAG_UNINITIALIZED_THIS = 0x06;
+	public static final int SMT_TAG_OBJECT = 0x07;
+	public static final int SMT_TAG_UNINITIALIZED = 0x08;
 
 	// Constants
 	public static final int CONSTANT_CLASS = 0x07;

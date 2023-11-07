@@ -9,6 +9,14 @@ public class WideControlFlowInstruction extends Instruction {
 	public WideControlFlowInstruction(int opcode) {
 		super(opcode);
 	}
+	
+	public int getBranch() {
+		return branch;
+	}
+	
+	public void setBranch(int branch) {
+		this.branch = branch;
+	}
 
 	@Override
 	public void read(ByteBuf buf) {

@@ -10,6 +10,14 @@ public class VarInstruction extends Instruction {
 		super(opcode);
 	}
 	
+	public int getIndex() {
+		return index;
+	}
+	
+	public void setIndex(int index) {
+		this.index = index;
+	}
+	
 	@Override
 	public void read(ByteBuf buf) {
 		index = buf.readByte();

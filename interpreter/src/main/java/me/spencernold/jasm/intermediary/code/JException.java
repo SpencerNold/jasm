@@ -3,6 +3,13 @@ package me.spencernold.jasm.intermediary.code;
 import me.spencernold.jasm.ByteBuf;
 import me.spencernold.jasm.intermediary.ReadWriteable;
 
+/**
+ * Implementation of decoded exception which can be thrown by a method.
+ * 
+ * @author Spencer Nold
+ * @since 1.0.0
+ * @see me.spencernold.jasm.intermediary.JMethod
+ */
 public class JException implements ReadWriteable {
 
 	private int startPc;

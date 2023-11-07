@@ -16,16 +16,40 @@ public class TableSwitchInstruction extends Instruction {
 		return def;
 	}
 	
+	public void setDefault(int def) {
+		this.def = def;
+	}
+	
 	public int getLow() {
 		return low;
+	}
+	
+	public void setLow(int low) {
+		this.low = low;
 	}
 	
 	public int getHigh() {
 		return high;
 	}
 	
+	public void setHigh(int high) {
+		this.high = high;
+	}
+	
 	public int[] getOffsets() {
 		return offsets;
+	}
+	
+	public void setOffsets(int[] offsets) {
+		this.offsets = offsets;
+	}
+	
+	public void setOffset(int index, int value) {
+		offsets[index] = value;
+	}
+	
+	public int getOffset(int index) {
+		return offsets[index];
 	}
 	
 	@Override

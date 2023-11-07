@@ -12,6 +12,14 @@ public class PushInstruction extends Instruction {
 	public PushInstruction(int opcode) {
 		super(opcode);
 	}
+	
+	public int getValue() {
+		return value;
+	}
+	
+	public void setValue(int value) {
+		this.value = value;
+	}
 
 	@Override
 	public void read(ByteBuf buf) {

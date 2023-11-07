@@ -1,6 +1,7 @@
 package me.spencernold.jasm.intermediary.attributes;
 
 import me.spencernold.jasm.ByteBuf;
+import me.spencernold.jasm.DynamicByteBuf;
 import me.spencernold.jasm.Opcodes;
 import me.spencernold.jasm.exceptions.ClassFormatException;
 import me.spencernold.jasm.exceptions.ClassFormatException.Type;
@@ -9,48 +10,98 @@ import me.spencernold.jasm.intermediary.ReadWriteable;
 import me.spencernold.jasm.intermediary.constants.Constant;
 import me.spencernold.jasm.intermediary.constants.Utf8Constant;
 
+/**
+ * Contains data relating to attributes of methods, fields, classes and other
+ * Java structures
+ * 
+ * @author Spencer Nold
+ * @since 1.0.0
+ * 
+ */
 public class Attribute implements ReadWriteable {
 
 	private final JClass jclass;
 	private int nameIndex;
 	private Body body;
-	
+
 	public Attribute(JClass jclass) {
 		this.jclass = jclass;
 	}
-	
+
+	/**
+	 * Gets a reference to a UTF-8 constant which defines what type of attribute
+	 * this is.
+	 * 
+	 * @return index of the attribute name in the constant pool
+	 */
 	public int getNameIndex() {
 		return nameIndex;
 	}
-	
+
+	/**
+	 * Sets a reference to a constant which defines what type of attribute this is.
+	 * This does not opdate the body of the attribute, and also does not ensure that
+	 * the name index points to a UTF-8 constant. Handle with care.
+	 * 
+	 * @param nameIndex
+	 */
 	public void setNameIndex(int nameIndex) {
 		this.nameIndex = nameIndex;
 	}
-	
+
+	/**
+	 * Gets the body of the attribute, which is different depending on the type of
+	 * the attribute.
+	 * 
+	 * @return body of the attribute
+	 */
 	public Body getBody() {
 		return body;
 	}
-	
+
+	/**
+	 * Tries to get an instance of <T> which implements body, and is a specific type
+	 * of Body. For example, {@code getBody(CodeAttribute.class)} would attempt to
+	 * return an instance of the Code attribute body.
+	 * 
+	 * @param <T>   instance of a target body
+	 * @param clazz target class type for <T>
+	 * @return instance of the body of type <T>
+	 */
 	public <T extends Body> T getBody(Class<T> clazz) {
 		return clazz.cast(body);
 	}
-	
+
+	/**
+	 * Checks if the body of the attribute is of type <T>.
+	 * 
+	 * @param <T>   type to be checked against
+	 * @param clazz class of type <T>
+	 * @return true if the body is an instance of <T>, false otherwise
+	 */
 	public <T extends Body> boolean isInstanceOf(Class<T> clazz) {
 		return clazz.isInstance(body);
 	}
-	
+
 	@Override
 	public void read(ByteBuf buf) {
 		nameIndex = buf.readShort();
 		int length = buf.readInt();
-		ByteBuf buf0 = new ByteBuf(buf.read(length));
+		ByteBuf buf0 = DynamicByteBuf.wrap(buf.read(length));
 		Constant constant = jclass.getConstPool().get(nameIndex);
 		if (!constant.isUtf8())
-			throw new ClassFormatException(Type.MALFORMED, String.format("attribute points to a constant which is not utf8: 0x%s", Integer.toUnsignedString(nameIndex, 16)));
+			throw new ClassFormatException(Type.MALFORMED, String.format(
+					"attribute points to a constant which is not utf8: 0x%s", Integer.toUnsignedString(nameIndex, 16)));
 		String value = ((Utf8Constant) constant).getValue();
 		switch (value) {
+		case Opcodes.ATTR_CONSTANT_VALUE:
+			body = new ConstValueAttribute();
+			break;
 		case Opcodes.ATTR_CODE:
 			body = new CodeAttribute(jclass);
+			break;
+		case Opcodes.ATTR_STACK_MAP_TABLE:
+			body = new StackMapTableAttribute();
 			break;
 		default:
 			body = new GenericBody();
@@ -58,11 +109,11 @@ public class Attribute implements ReadWriteable {
 		}
 		body.read(buf0);
 	}
-	
+
 	@Override
 	public void write(ByteBuf buf) {
 		buf.writeShort(nameIndex);
-		ByteBuf buf0 = new ByteBuf();
+		ByteBuf buf0 = DynamicByteBuf.allocate();
 		body.write(buf0);
 		byte[] data = buf0.getRawBuffer();
 		buf.writeInt(data.length);

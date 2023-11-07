@@ -10,6 +10,22 @@ public class NewMultiArrayInstruction extends Instruction {
 	public NewMultiArrayInstruction(int opcode) {
 		super(opcode);
 	}
+	
+	public int getIndex() {
+		return index;
+	}
+	
+	public void setIndex(int index) {
+		this.index = index;
+	}
+	
+	public int getDimensions() {
+		return dimensions;
+	}
+	
+	public void setDimensions(int dimensions) {
+		this.dimensions = dimensions;
+	}
 
 	@Override
 	public void read(ByteBuf buf) {

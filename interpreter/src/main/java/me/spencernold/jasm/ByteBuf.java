@@ -1,85 +1,145 @@
 package me.spencernold.jasm;
 
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.util.Arrays;
+/**
+ * Abstraction of a byte buffer which uses the big endian byte order and first-in-first-out.
+ * 
+ * @author Spencer Nold
+ * @since 1.0.0
+ * @see me.spencernold.jasm.DynamicByteBuf
+ */
+public abstract class ByteBuf {
 
-public class ByteBuf {
-	
-	// TODO Have the size be dynamic, double everytime more space is needed (have hard-coded limit on MAX_SIZE)
-	// TODO have a LONG count the current index in reading and writing
-	// TODO implement my own number-byte converter for BIG_ENDIAN to do away with the slow java ByteBuffer code
+	/**
+	 * Appends n bytes to the end of the buffer.
+	 * 
+	 * @param bytes bytes to be written
+	 */
+	public abstract void write(byte[] bytes);
 
-	private byte[] buffer;
+	/**
+	 * Reads the next n bytes from the buffer in first-in-first-out order.
+	 * 
+	 * @param n amount of bytes to be read
+	 * @return a byte array of size n
+	 */
+	public abstract byte[] read(int n);
+
+	/**
+	 * Gets the bytes currently to be read or already written to the buffer.
+	 * 
+	 * @return bytes in the buffer
+	 */
+	public abstract byte[] getRawBuffer();
+
+	/**
+	 * Sets the raw buffer in the byte buffer.
+	 * 
+	 * @param bytes bytes to be set
+	 */
+	public abstract void setRawBuffer(byte[] bytes);
+
+	/**
+	 * @return true if there are no bytes left in the buffer, false if there are
+	 */
+	public abstract boolean isEmpty();
 	
-	public ByteBuf(byte[] buffer) {
-		this.buffer = buffer;
-	}
-	
-	public ByteBuf() {
-		this(new byte[0]);
-	}
-	
-	public void write(byte[] bytes) {
-		byte[] buf = new byte[buffer.length + bytes.length];
-		System.arraycopy(buffer,  0, buf,  0, buffer.length);
-		System.arraycopy(bytes, 0, buf, buffer.length, bytes.length);
-		buffer = buf;
-	}
-	
+	/**
+	 * @return how many bytes are left in the buffer
+	 */
+	public abstract int getRemainingBytes();
+
+	/**
+	 * Writes a single 8-bit integer to the byte buffer.
+	 * 
+	 * @param b byte to be written
+	 */
 	public void writeByte(int b) {
 		write(new byte[] { (byte) b });
 	}
-	
+
+	/**
+	 * Writes a single 16-bit integer to the byte buffer in big endian order.
+	 * 
+	 * @param s short to be written
+	 */
 	public void writeShort(int s) {
-		write(ByteBuffer.allocate(2).order(ByteOrder.BIG_ENDIAN).putShort((short) s).array());
+		byte[] bytes = new byte[2];
+		bytes[1] = (byte) ((s >> 0) & 0xFF);
+		bytes[0] = (byte) ((s >> 8) & 0xFF);
+		write(bytes);
 	}
-	
+
+	/**
+	 * Writes a single 32-bit integer to the byte buffer in big endian order.
+	 * 
+	 * @param i int to be written
+	 */
 	public void writeInt(int i) {
-		write(ByteBuffer.allocate(4).order(ByteOrder.BIG_ENDIAN).putInt(i).array());
+		byte[] bytes = new byte[4];
+		bytes[3] = (byte) ((i >> 0) & 0xFF);
+		bytes[2] = (byte) ((i >> 8) & 0xFF);
+		bytes[1] = (byte) ((i >> 16) & 0xFF);
+		bytes[0] = (byte) ((i >> 24) & 0xFF);
+		write(bytes);
 	}
-	
+
+	/**
+	 * Writes a single 64-bit integer to the byte buffer in big endian order.
+	 * 
+	 * @param l long to be written
+	 */
 	public void writeLong(long l) {
-		write(ByteBuffer.allocate(8).order(ByteOrder.BIG_ENDIAN).putLong(l).array());
+		byte[] bytes = new byte[8];
+		bytes[7] = (byte) ((l >> 0) & 0xFF);
+		bytes[6] = (byte) ((l >> 8) & 0xFF);
+		bytes[5] = (byte) ((l >> 16) & 0xFF);
+		bytes[4] = (byte) ((l >> 24) & 0xFF);
+		bytes[3] = (byte) ((l >> 32) & 0xFF);
+		bytes[2] = (byte) ((l >> 40) & 0xFF);
+		bytes[1] = (byte) ((l >> 48) & 0xFF);
+		bytes[0] = (byte) ((l >> 56) & 0xFF);
+		write(bytes);
 	}
-	
-	public byte[] read(int n) {
-		if (n > buffer.length) {
-			byte[] bytes = new byte[n];
-			System.arraycopy(buffer, 0, bytes, 0, buffer.length);
-			buffer = new byte[0];
-			return bytes;
-		}
-		byte[] bytes = Arrays.copyOfRange(buffer, 0, n);
-		buffer = Arrays.copyOfRange(buffer, n, buffer.length);
-		return bytes;
+
+	/**
+	 * Reads a single 8-bit integer from the byte buffer.
+	 * 
+	 * @return next byte in the buffer
+	 */
+	public int readByte() {
+		return Byte.toUnsignedInt(read(1)[0]);
 	}
-	
-	public byte readByte() {
-		return read(1)[0];
+
+	/**
+	 * Reads a single 16-bit integer from the byte buffer in big endian order.
+	 * 
+	 * @return next short in the buffer
+	 */
+	public int readShort() {
+		byte[] bytes = read(2);
+		return (short) (((bytes[0] & 0xFF) << 8) | ((bytes[1] & 0xFF) << 0));
 	}
-	
-	public short readShort() {
-		return ByteBuffer.wrap(read(2)).order(ByteOrder.BIG_ENDIAN).getShort();
-	}
-	
+
+	/**
+	 * Reads a single 32-bit integer from the byte buffer in big endian order.
+	 * 
+	 * @return next int in the buffer
+	 */
 	public int readInt() {
-		return ByteBuffer.wrap(read(4)).order(ByteOrder.BIG_ENDIAN).getInt();
+		byte[] bytes = read(4);
+		return ((bytes[0] & 0xFF) << 24) | ((bytes[1] & 0xFF) << 16) | ((bytes[2] & 0xFF) << 8)
+				| ((bytes[3] & 0xFF) << 0);
 	}
-	
+
+	/**
+	 * Reads a single 64-bit integer from the byte buffer in big enaian order.
+	 * 
+	 * @return next long in the buffer
+	 */
 	public long readLong() {
-		return ByteBuffer.wrap(read(8)).order(ByteOrder.BIG_ENDIAN).getLong();
-	}
-	
-	public byte[] getRawBuffer() {
-		return buffer;
-	}
-	
-	public void setRawBuffer(byte[] buffer) {
-		this.buffer = buffer;
-	}
-	
-	public boolean isEmpty() {
-		return buffer.length == 0;
+		byte[] bytes = read(8);
+		return ((bytes[0] & 0xFF) << 56) | ((bytes[1] & 0xFF) << 48) | ((bytes[2] & 0xFF) << 40)
+				| ((bytes[3] & 0xFF) << 32) | ((bytes[4] & 0xFF) << 24) | ((bytes[5] & 0xFF) << 16)
+				| ((bytes[6] & 0xFF) << 8) | ((bytes[7] & 0xFF) << 0);
 	}
 }

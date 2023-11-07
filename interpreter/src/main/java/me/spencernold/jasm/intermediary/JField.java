@@ -9,39 +9,74 @@ public class JField implements ReadWriteable {
 	private int nameIndex;
 	private int descriptorIndex;
 	private final AttributePool attributePool;
-	
+
 	public JField(JClass jclass) {
 		attributePool = new AttributePool(jclass);
 	}
-	
+
+	/**
+	 * Gets the access modifier of the field.
+	 * 
+	 * @return integer value of the access modifier
+	 */
 	public int getAccess() {
 		return access;
 	}
-	
+
+	/**
+	 * Sets the access modifier of the field.
+	 * 
+	 * @param access new integer value of the access modifier
+	 */
 	public void setAccess(int access) {
 		this.access = access;
 	}
-	
+
+	/**
+	 * Gets the index of the field name in the constant pool.
+	 * 
+	 * @return index of field name in constant pool
+	 */
 	public int getNameIndex() {
 		return nameIndex;
 	}
-	
+
+	/**
+	 * Sets the index of the field name in the constant pool.
+	 * 
+	 * @param nameIndex new field name index in constant pool
+	 */
 	public void setNameIndex(int nameIndex) {
 		this.nameIndex = nameIndex;
 	}
-	
+
+	/**
+	 * Gets the index of the field descriptor in the constant pool.
+	 * 
+	 * @return index of field descriptor in constant pool
+	 */
 	public int getDescriptorIndex() {
 		return descriptorIndex;
 	}
-	
+
+	/**
+	 * Sets the index of the field descriptor in the constant pool.
+	 * 
+	 * @param descriptorIndex new index of field descriptor in constant pool
+	 */
 	public void setDescriptorIndex(int descriptorIndex) {
 		this.descriptorIndex = descriptorIndex;
 	}
-	
+
+	/**
+	 * Gets an instance of the field's attribute pool.
+	 * 
+	 * @return AttributePool instance for the field
+	 */
 	public AttributePool getAttributePool() {
 		return attributePool;
 	}
-	
+
 	@Override
 	public void read(ByteBuf buf) {
 		access = buf.readShort();
@@ -49,7 +84,7 @@ public class JField implements ReadWriteable {
 		descriptorIndex = buf.readShort();
 		attributePool.read(buf);
 	}
-	
+
 	@Override
 	public void write(ByteBuf buf) {
 		buf.writeShort(access);

@@ -21,7 +21,7 @@ public class WideInstruction extends Instruction {
 
 	@Override
 	public void read(ByteBuf buf) {
-		int opcode = Byte.toUnsignedInt(buf.readByte());
+		int opcode = buf.readByte();
 		if (opcode == Opcodes.IINC)
 			child = new WideIncrementInstruction(opcode);
 		else

@@ -13,6 +13,38 @@ public class LookupSwitchInstruction extends Instruction {
 		super(opcode);
 	}
 	
+	public int getDefault() {
+		return def;
+	}
+	
+	public void setDefault(int def) {
+		this.def = def;
+	}
+	
+	public int getPairCount() {
+		return npairs;
+	}
+	
+	public void setPairCount(int npairs) {
+		this.npairs = npairs;
+	}
+	
+	public int[] getOffsets() {
+		return offsets;
+	}
+	
+	public void setOffsets(int[] offsets) {
+		this.offsets = offsets;
+	}
+	
+	public int getOffset(int index) {
+		return offsets[index];
+	}
+	
+	public void setOffset(int index, int value) {
+		offsets[index] = value;
+	}
+	
 	@Override
 	public void setWithOffset(int offset) {
 		padding = (4 - (offset % 4)) % 4;

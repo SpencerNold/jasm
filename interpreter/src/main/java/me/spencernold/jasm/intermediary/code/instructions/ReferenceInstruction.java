@@ -9,6 +9,14 @@ public class ReferenceInstruction extends Instruction {
 	public ReferenceInstruction(int opcode) {
 		super(opcode);
 	}
+	
+	public int getIndex() {
+		return index;
+	}
+	
+	public void setIndex(int index) {
+		this.index = index;
+	}
 
 	@Override
 	public void read(ByteBuf buf) {
