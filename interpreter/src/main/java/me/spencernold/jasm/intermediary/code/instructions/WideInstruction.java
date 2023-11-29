@@ -25,7 +25,7 @@ public class WideInstruction extends Instruction {
 		if (opcode == Opcodes.IINC)
 			child = new WideIncrementInstruction(opcode);
 		else
-			child = new ReferenceInstruction(opcode);
+			child = new WideVarInstruction(opcode);
 		child.read(buf);
 	}
 

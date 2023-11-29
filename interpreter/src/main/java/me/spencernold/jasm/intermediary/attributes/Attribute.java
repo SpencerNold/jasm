@@ -18,7 +18,7 @@ import me.spencernold.jasm.intermediary.constants.Utf8Constant;
  * @since 1.0.0
  * 
  */
-public class Attribute implements ReadWriteable {
+public class Attribute implements ReadWriteable<ByteBuf> {
 
 	private final JClass jclass;
 	private int nameIndex;
@@ -49,6 +49,18 @@ public class Attribute implements ReadWriteable {
 		this.nameIndex = nameIndex;
 	}
 
+	/**
+	 * Gets the value of the attribute name in the constant pool.
+	 * 
+	 * @return utf8 string of the name
+	 */
+	public String getName() {
+		Constant constant = jclass.getConstPool().get(nameIndex);
+		if (!(constant instanceof Utf8Constant) || !constant.isUtf8())
+			throw new ClassFormatException(Type.MALFORMED, "name is not a string");
+		return ((Utf8Constant) constant).getValue();
+	}
+	
 	/**
 	 * Gets the body of the attribute, which is different depending on the type of
 	 * the attribute.

@@ -21,7 +21,7 @@ import me.spencernold.jasm.intermediary.code.instructions.TableSwitchInstruction
 import me.spencernold.jasm.intermediary.code.instructions.VarInstruction;
 import me.spencernold.jasm.intermediary.code.instructions.WideControlFlowInstruction;
 import me.spencernold.jasm.intermediary.code.instructions.WideInstruction;
-import me.spencernold.jasm.intermediary.code.instructions.WideReferenceInstruction;
+import me.spencernold.jasm.intermediary.code.instructions.WideVarInstruction;
 
 public class InsnEncoder {
 
@@ -62,8 +62,8 @@ public class InsnEncoder {
 		initialize(Opcodes.PUTFIELD, ReferenceInstruction.class);
 		initialize(Opcodes.PUTSTATIC, ReferenceInstruction.class);
 		// wide reference instruction
-		initialize(Opcodes.INVOKEDYNAMIC, WideReferenceInstruction.class);
-		initialize(Opcodes.INVOKEINTERFACE, WideReferenceInstruction.class);
+		initialize(Opcodes.INVOKEDYNAMIC, WideVarInstruction.class);
+		initialize(Opcodes.INVOKEINTERFACE, WideVarInstruction.class);
 		// control flow instructions
 		initialize(Opcodes.GOTO, ControlFlowInstruction.class);
 		initialize(Opcodes.IF_ACMPEQ, ControlFlowInstruction.class);

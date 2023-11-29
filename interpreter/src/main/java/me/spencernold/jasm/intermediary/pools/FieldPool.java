@@ -7,7 +7,7 @@ import me.spencernold.jasm.intermediary.JClass;
 import me.spencernold.jasm.intermediary.JField;
 import me.spencernold.jasm.intermediary.ReadWriteable;
 
-public class FieldPool implements ReadWriteable {
+public class FieldPool implements ReadWriteable<ByteBuf> {
 
 	private final JClass jclass;
 	private final LinkedList<JField> fields = new LinkedList<>();
@@ -24,7 +24,7 @@ public class FieldPool implements ReadWriteable {
 	public LinkedList<JField> getFields() {
 		return fields;
 	}
-
+	
 	@Override
 	public void read(ByteBuf buf) {
 		int size = buf.readShort();

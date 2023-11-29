@@ -22,7 +22,7 @@ import me.spencernold.jasm.intermediary.pools.MethodPool;
  * @see me.spencernold.jasm.ClassReader
  * @see me.spencernold.jasm.ClassWriter
  */
-public class JClass implements ReadWriteable {
+public class JClass implements AttributeElement, ReadWriteable<ByteBuf> {
 
 	private int version;
 	private final ConstPool constPool;

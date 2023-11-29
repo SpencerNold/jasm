@@ -6,6 +6,7 @@
 .DS_Store
 
 interpreter/src/main/java/Test.java
+assembler/src/main/java/Test.java
 
 target/
 *.ser

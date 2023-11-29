@@ -14,7 +14,7 @@ import me.spencernold.jasm.intermediary.attributes.Body;
  * @author Spencer Nold
  * @since 1.0.0
  */
-public class AttributePool implements ReadWriteable {
+public class AttributePool implements ReadWriteable<ByteBuf> {
 
 	private final JClass jclass;
 	private final LinkedList<Attribute> attributes = new LinkedList<>();
@@ -45,7 +45,7 @@ public class AttributePool implements ReadWriteable {
 	public LinkedList<Attribute> getAttributes() {
 		return attributes;
 	}
-
+	
 	@Override
 	public void read(ByteBuf buf) {
 		int size = buf.readShort();

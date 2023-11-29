@@ -1,8 +1,9 @@
 package me.spencernold.jasm.intermediary.verify.frames;
 
+import me.spencernold.jasm.ByteBuf;
 import me.spencernold.jasm.intermediary.ReadWriteable;
 
-public abstract class Frame implements ReadWriteable {
+public abstract class Frame implements ReadWriteable<ByteBuf> {
 	
 	private int type;
 	

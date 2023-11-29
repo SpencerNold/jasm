@@ -23,7 +23,7 @@ import me.spencernold.jasm.intermediary.constants.WideReferenceConstant;
  * @author Spencer Nold
  * @since 1.0.0
  */
-public class ConstPool implements ReadWriteable {
+public class ConstPool implements ReadWriteable<ByteBuf> {
 
 	private final ArrayList<Constant> constants = new ArrayList<>();
 
@@ -56,6 +56,13 @@ public class ConstPool implements ReadWriteable {
 	 */
 	public ArrayList<Constant> getConstants() {
 		return constants;
+	}
+	
+	/**
+	 * @return size of the internal ArrayList
+	 */
+	public int size() {
+		return constants.size();
 	}
 
 	@Override

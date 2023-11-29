@@ -6,7 +6,7 @@ import me.spencernold.jasm.ByteBuf;
 import me.spencernold.jasm.intermediary.ReadWriteable;
 import me.spencernold.jasm.intermediary.verify.frames.Frame;
 
-public class StackMapTable implements ReadWriteable {
+public class StackMapTable implements ReadWriteable<ByteBuf> {
 
 	private final LinkedList<Frame> frames = new LinkedList<>();
 	private final FrameEncoder encoder = new FrameEncoder();

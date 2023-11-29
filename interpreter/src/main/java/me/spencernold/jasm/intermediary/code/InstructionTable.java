@@ -10,7 +10,7 @@ import me.spencernold.jasm.intermediary.ReadWriteable;
  * @author Spencer Nold
  * @since 1.0.0
  */
-public class InstructionTable implements ReadWriteable {
+public class InstructionTable implements ReadWriteable<ByteBuf> {
 
 	private final Code code;
 

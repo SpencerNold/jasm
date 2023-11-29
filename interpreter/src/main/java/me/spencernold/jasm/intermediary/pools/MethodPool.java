@@ -7,7 +7,7 @@ import me.spencernold.jasm.intermediary.JClass;
 import me.spencernold.jasm.intermediary.JMethod;
 import me.spencernold.jasm.intermediary.ReadWriteable;
 
-public class MethodPool implements ReadWriteable {
+public class MethodPool implements ReadWriteable<ByteBuf> {
 
 	private final JClass jclass;
 	private final LinkedList<JMethod> methods = new LinkedList<>();

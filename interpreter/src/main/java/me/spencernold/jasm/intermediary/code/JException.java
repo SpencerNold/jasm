@@ -10,7 +10,7 @@ import me.spencernold.jasm.intermediary.ReadWriteable;
  * @since 1.0.0
  * @see me.spencernold.jasm.intermediary.JMethod
  */
-public class JException implements ReadWriteable {
+public class JException implements ReadWriteable<ByteBuf> {
 
 	private int startPc;
 	private int endPc;

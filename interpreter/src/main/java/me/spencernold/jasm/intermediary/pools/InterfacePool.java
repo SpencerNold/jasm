@@ -5,7 +5,7 @@ import java.util.LinkedList;
 import me.spencernold.jasm.ByteBuf;
 import me.spencernold.jasm.intermediary.ReadWriteable;
 
-public class InterfacePool implements ReadWriteable {
+public class InterfacePool implements ReadWriteable<ByteBuf> {
 
 	private final LinkedList<Short> interfaces = new LinkedList<>();
 

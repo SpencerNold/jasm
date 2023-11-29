@@ -12,7 +12,7 @@ import me.spencernold.jasm.intermediary.ReadWriteable;
  * @since 1.0.0
  * @see me.spencernold.jasm.intermediary.code.JException
  */
-public class ExceptionTable implements ReadWriteable {
+public class ExceptionTable implements ReadWriteable<ByteBuf> {
 
 	private final LinkedList<JException> exceptions = new LinkedList<>();
 

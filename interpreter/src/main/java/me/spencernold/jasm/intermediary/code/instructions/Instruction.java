@@ -1,8 +1,9 @@
 package me.spencernold.jasm.intermediary.code.instructions;
 
+import me.spencernold.jasm.ByteBuf;
 import me.spencernold.jasm.intermediary.ReadWriteable;
 
-public abstract class Instruction implements ReadWriteable {
+public abstract class Instruction implements ReadWriteable<ByteBuf> {
 	
 	protected int opcode;
 	

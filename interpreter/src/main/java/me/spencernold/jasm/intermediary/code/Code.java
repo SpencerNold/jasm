@@ -13,7 +13,7 @@ import me.spencernold.jasm.intermediary.code.instructions.Instruction;
  * @since 1.0.0
  *
  */
-public class Code implements ReadWriteable {
+public class Code implements ReadWriteable<ByteBuf> {
 
 	private final LinkedList<Instruction> instructions = new LinkedList<>();
 	private final InsnEncoder decoder = new InsnEncoder();

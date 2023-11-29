@@ -2,11 +2,11 @@ package me.spencernold.jasm.intermediary.code.instructions;
 
 import me.spencernold.jasm.ByteBuf;
 
-public class VarInstruction extends Instruction {
-
-	private int value;
+public class WideVarInstruction extends Instruction {
 	
-	public VarInstruction(int opcode) {
+	private int value;
+
+	public WideVarInstruction(int opcode) {
 		super(opcode);
 	}
 	
@@ -17,19 +17,19 @@ public class VarInstruction extends Instruction {
 	public void setValue(int value) {
 		this.value = value;
 	}
-	
+
 	@Override
 	public void read(ByteBuf buf) {
-		value = buf.readByte();
+		value = buf.readShort();
 	}
-	
+
 	@Override
 	public void write(ByteBuf buf) {
-		buf.writeByte(value);
+		buf.writeShort(value);
 	}
 	
 	@Override
 	public int getSize() {
-		return 1;
+		return 4;
 	}
 }

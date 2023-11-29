@@ -10,7 +10,7 @@ import me.spencernold.jasm.intermediary.verify.locals.ObjectVariableInfo;
 import me.spencernold.jasm.intermediary.verify.locals.UninitializedVariableInfo;
 import me.spencernold.jasm.intermediary.verify.locals.VariableInfo;
 
-public class Locals implements ReadWriteable {
+public class Locals implements ReadWriteable<ByteBuf> {
 	
 	private final LinkedList<VariableInfo> verificationTypeInfo = new LinkedList<>();
 	private int size;
