@@ -1,16 +1,17 @@
 package me.spencernold.jasm.intermediary.pools;
 
-import java.util.LinkedList;
-
 import me.spencernold.jasm.ByteBuf;
 import me.spencernold.jasm.intermediary.JClass;
 import me.spencernold.jasm.intermediary.JField;
 import me.spencernold.jasm.intermediary.ReadWriteable;
 
-public class FieldPool implements ReadWriteable<ByteBuf> {
+import java.util.ArrayList;
+import java.util.Iterator;
+
+public class FieldPool implements ReadWriteable<ByteBuf>, Iterable<JField> {
 
 	private final JClass jclass;
-	private final LinkedList<JField> fields = new LinkedList<>();
+	private ArrayList<JField> fields;
 
 	public FieldPool(JClass jclass) {
 		this.jclass = jclass;
@@ -21,13 +22,14 @@ public class FieldPool implements ReadWriteable<ByteBuf> {
 	 * 
 	 * @return LinkedList instance containing the fields in the pool
 	 */
-	public LinkedList<JField> getFields() {
+	public ArrayList<JField> getFields() {
 		return fields;
 	}
 	
 	@Override
 	public void read(ByteBuf buf) {
 		int size = buf.readShort();
+		fields = new ArrayList<>(size);
 		for (int i = 0; i < size; i++) {
 			JField jfield = new JField(jclass);
 			jfield.read(buf);
@@ -40,5 +42,10 @@ public class FieldPool implements ReadWriteable<ByteBuf> {
 		buf.writeShort(fields.size());
 		for (JField jfield : fields)
 			jfield.write(buf);
+	}
+
+	@Override
+	public Iterator<JField> iterator() {
+		return fields.iterator();
 	}
 }

@@ -1,5 +1,6 @@
 package me.spencernold.jasm.intermediary;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 import me.spencernold.jasm.ByteBuf;
@@ -24,7 +25,8 @@ import me.spencernold.jasm.intermediary.pools.MethodPool;
  */
 public class JClass implements AttributeElement, ReadWriteable<ByteBuf> {
 
-	private int version;
+	private int minorVersion;
+	private int majorVersion;
 	private final ConstPool constPool;
 	private int access;
 	private int classNameIndex;
@@ -69,37 +71,59 @@ public class JClass implements AttributeElement, ReadWriteable<ByteBuf> {
 	/**
 	 * @return LinkedList of the fields in the class
 	 */
-	public LinkedList<JField> getFields() {
+	public ArrayList<JField> getFields() {
 		return fieldPool.getFields();
 	}
 
 	/**
 	 * @return LinkedList of the methods in the class
 	 */
-	public LinkedList<JMethod> getMethods() {
+	public ArrayList<JMethod> getMethods() {
 		return methodPool.getMethods();
 	}
 
 	/**
-	 * Gets the version in which this class file was compiled in. The JVM supports
+	 * Gets the major version in which this class file was compiled in. The JVM supports
 	 * backwards compatibility, but newer classes may not be run on older JVM
 	 * implementations.
 	 * 
-	 * @return version of the class
+	 * @return major version of the class
 	 */
-	public int getVersion() {
-		return version;
+	public int getMajorVersion() {
+		return majorVersion;
 	}
 
 	/**
-	 * Sets the version in which this class file was compiled in. The JVM supports
+	 * Gets the minor version in which this class file was compiled in. The JVM supports
+	 * backwards compatibility, but newer classes may not be run on older JVM
+	 * implementations.
+	 *
+	 * @return minor version of the class
+	 */
+	public int getMinorVersion() {
+		return minorVersion;
+	}
+
+	/**
+	 * Sets the major version in which this class file was compiled in. The JVM supports
 	 * backwards compatibility, but newer classes may not be run on older JVM
 	 * implementations.
 	 * 
-	 * @param version new version of the class
+	 * @param version new major version of the class
 	 */
-	public void setVersion(int version) {
-		this.version = version;
+	public void setMajorVersion(int version) {
+		this.majorVersion = version;
+	}
+
+	/**
+	 * Sets the minor version in which this class file was compiled in. The JVM supports
+	 * backwards compatibility, but newer classes may not be run on older JVM
+	 * implementations.
+	 *
+	 * @param version new minor version of the class
+	 */
+	public void setMinorVersion(int version) {
+		this.minorVersion = version;
 	}
 
 	/**
@@ -202,7 +226,8 @@ public class JClass implements AttributeElement, ReadWriteable<ByteBuf> {
 	public void read(ByteBuf buf) {
 		if (buf.readInt() != 0xCAFEBABE)
 			throw new ClassFormatException(Type.NOT_CLASS);
-		version = buf.readInt();
+		minorVersion = buf.readShort();
+		majorVersion = buf.readShort();
 		constPool.read(buf);
 		access = buf.readShort();
 		classNameIndex = buf.readShort();
@@ -216,7 +241,8 @@ public class JClass implements AttributeElement, ReadWriteable<ByteBuf> {
 	@Override
 	public void write(ByteBuf buf) {
 		buf.writeInt(0xCAFEBABE);
-		buf.writeInt(version);
+		buf.writeShort(minorVersion);
+		buf.writeShort(majorVersion);
 		constPool.write(buf);
 		buf.writeShort(access);
 		buf.writeShort(classNameIndex);

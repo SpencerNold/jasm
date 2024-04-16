@@ -1,17 +1,18 @@
 package me.spencernold.jasm.intermediary.pools;
 
-import java.util.LinkedList;
-
 import me.spencernold.jasm.ByteBuf;
 import me.spencernold.jasm.intermediary.JClass;
 import me.spencernold.jasm.intermediary.JMethod;
 import me.spencernold.jasm.intermediary.ReadWriteable;
 
-public class MethodPool implements ReadWriteable<ByteBuf> {
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedList;
+
+public class MethodPool implements ReadWriteable<ByteBuf>, Iterable<JMethod> {
 
 	private final JClass jclass;
-	private final LinkedList<JMethod> methods = new LinkedList<>();
-	
+	private ArrayList<JMethod> methods;
 	public MethodPool(JClass jclass) {
 		this.jclass = jclass;
 	}
@@ -19,13 +20,14 @@ public class MethodPool implements ReadWriteable<ByteBuf> {
 	/**
 	 * @return LinkedList of decoded methods
 	 */
-	public LinkedList<JMethod> getMethods() {
+	public ArrayList<JMethod> getMethods() {
 		return methods;
 	}
 	
 	@Override
 	public void read(ByteBuf buf) {
 		int size = buf.readShort();
+		methods = new ArrayList<>(size);
 		for (int i = 0; i < size; i++) {
 			JMethod method = new JMethod(jclass);
 			method.read(buf);
@@ -38,5 +40,10 @@ public class MethodPool implements ReadWriteable<ByteBuf> {
 		buf.writeShort(methods.size());
 		for (JMethod method : methods)
 			method.write(buf);
+	}
+
+	@Override
+	public Iterator<JMethod> iterator() {
+		return methods.iterator();
 	}
 }

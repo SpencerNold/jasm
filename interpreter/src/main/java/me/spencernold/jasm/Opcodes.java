@@ -4,12 +4,12 @@ import me.spencernold.jasm.utils.IntRange;
 
 /**
  * JVM Specification opcodes and other magic values.
- * 
+ *
  * @author Spencer Nold
  * @since 1.0.0
  */
-public class Opcodes {
-	
+public final class Opcodes {
+
 	// Frame types
 	public static final IntRange FRAME_TYPE_SAME = new IntRange(0, 63);
 	public static final IntRange FRAME_TYPE_SAME_LOCALS_1_STACK_ITEM = new IntRange(64, 127);
@@ -20,7 +20,7 @@ public class Opcodes {
 	public static final IntRange FRAME_TYPE_SAME_EXTENDED = new IntRange(251, 251);
 	public static final IntRange FRAME_TYPE_APPEND = new IntRange(252, 254);
 	public static final IntRange FRAME_TYPE_FULL = new IntRange(255, 255);
-	
+
 	// StackMapTable Tags
 	public static final int SMT_TAG_TOP = 0x00;
 	public static final int SMT_TAG_INT = 0x01;
@@ -28,7 +28,7 @@ public class Opcodes {
 	public static final int SMT_TAG_DOUBLE = 0x03;
 	public static final int SMT_TAG_LONG = 0x04;
 	public static final int SMT_TAG_NULL = 0x05;
-	public static final int SMT_TAG_UNINITIALIZED_THIS = 0x06;
+	public static final int SMT_TAG_UNIANITIALIZED_THIS = 0x06;
 	public static final int SMT_TAG_OBJECT = 0x07;
 	public static final int SMT_TAG_UNINITIALIZED = 0x08;
 
@@ -55,13 +55,20 @@ public class Opcodes {
 	public static final int ACC_STATIC = 0x0008;
 	public static final int ACC_FINAL = 0x00010;
 	public static final int ACC_SYNCHRONIZED = 0x0020;
+    public static final int ACC_SUPER = 0x0020;
 	public static final int ACC_BRIDGE = 0x0040;
+    public static final int ACC_VOLATILE = 0x0040;
 	public static final int ACC_VARARGS = 0x0080;
+    public static final int ACC_TRANSIENT = 0x0080;
 	public static final int ACC_NATIVE = 0x0100;
+    public static final int ACC_INTERFACE = 0x0200;
 	public static final int ACC_ABSTRACT = 0x0400;
 	public static final int ACC_STRICT = 0x0800;
 	public static final int ACC_SYNTHETIC = 0x1000;
-	
+    public static final int ACC_ANNOTATION = 0x2000;
+    public static final int ACC_ENUM = 0x4000;
+    public static final int ACC_MODULE = 0x8000;
+
 	// Attributes
 	public static final String ATTR_CONSTANT_VALUE = "ConstantValue";
 	public static final String ATTR_CODE = "Code";
@@ -83,7 +90,8 @@ public class Opcodes {
 	public static final String ATTR_RUNTIME_INVISIBLE_PARAMETER_ANNOTATIONS = "RuntimeInvisibleParameterAnnotations";
 	public static final String ATTR_ANNOTATION_DEFAULT = "AnnotationDefault";
 	public static final String ATTR_BOOTSTRAP_METHODS = "BootstrapMethods";
-	
+
+
 	// Instructions
 	public static final int AALOAD = 0x32;
 	public static final int AASTORE = 0x53;

@@ -4,6 +4,7 @@ import me.spencernold.jasm.ByteBuf;
 import me.spencernold.jasm.Opcodes;
 import me.spencernold.jasm.exceptions.ClassFormatException;
 import me.spencernold.jasm.exceptions.ClassFormatException.Type;
+import me.spencernold.jasm.intermediary.pools.ConstPool;
 
 public class PushInstruction extends Instruction {
 

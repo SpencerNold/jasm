@@ -1,20 +1,17 @@
 package me.spencernold.jasm.intermediary.pools;
 
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-
 import me.spencernold.jasm.ByteBuf;
 import me.spencernold.jasm.Opcodes;
 import me.spencernold.jasm.exceptions.ClassFormatException;
 import me.spencernold.jasm.exceptions.ClassFormatException.Type;
 import me.spencernold.jasm.intermediary.ReadWriteable;
-import me.spencernold.jasm.intermediary.constants.Constant;
-import me.spencernold.jasm.intermediary.constants.IntegralConstant;
-import me.spencernold.jasm.intermediary.constants.MethodHandleConstant;
-import me.spencernold.jasm.intermediary.constants.ReferenceConstant;
-import me.spencernold.jasm.intermediary.constants.Utf8Constant;
-import me.spencernold.jasm.intermediary.constants.WideIntegralConstant;
-import me.spencernold.jasm.intermediary.constants.WideReferenceConstant;
+import me.spencernold.jasm.intermediary.constants.*;
+
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 /**
  * Constant Pool of the JVM class file, where constant values such as class
@@ -23,7 +20,7 @@ import me.spencernold.jasm.intermediary.constants.WideReferenceConstant;
  * @author Spencer Nold
  * @since 1.0.0
  */
-public class ConstPool implements ReadWriteable<ByteBuf> {
+public class ConstPool implements ReadWriteable<ByteBuf>, Iterable<Constant> {
 
 	private final ArrayList<Constant> constants = new ArrayList<>();
 
@@ -40,6 +37,24 @@ public class ConstPool implements ReadWriteable<ByteBuf> {
 		return constants.get(index - 1);
 	}
 
+	public String getStringFromReferenceConstant(int index) {
+		Constant constant = get(index);
+		if (!(constant instanceof ReferenceConstant))
+			return null;
+		ReferenceConstant refConst = (ReferenceConstant) constant;
+		constant = get(refConst.getIndex());
+		if (!(constant instanceof Utf8Constant))
+			return null;
+		return ((Utf8Constant) constant).getValue();
+	}
+
+	public <T extends Constant> T getAsType(Class<T> type, int index) {
+		Constant constant = get(index);
+		if (!type.isInstance(constant))
+			return null;
+		return type.cast(constant);
+	}
+
 	/**
 	 * Adds a constant to the current and existing constant pool.
 	 * 
@@ -48,7 +63,9 @@ public class ConstPool implements ReadWriteable<ByteBuf> {
 	 */
 	public int add(Constant constant) {
 		constants.add(constant);
-		return constants.size();
+		int index = constants.size();
+		constant.setConstPoolIndex(index);
+		return index;
 	}
 
 	/**
@@ -56,6 +73,18 @@ public class ConstPool implements ReadWriteable<ByteBuf> {
 	 */
 	public ArrayList<Constant> getConstants() {
 		return constants;
+	}
+
+	public Stream<Constant> getConstantsByType(int type) {
+		return getConstants(constant -> constant.getTag() == type);
+	}
+
+	public <T extends Constant> Stream<T> getConstantsByType(Class<T> type) {
+		return getConstants(type::isInstance).map(type::cast);
+	}
+
+	public Stream<Constant> getConstants(Predicate<? super Constant> predicate) {
+		return constants.stream().filter(predicate);
 	}
 	
 	/**
@@ -74,28 +103,28 @@ public class ConstPool implements ReadWriteable<ByteBuf> {
 			case Opcodes.CONSTANT_CLASS:
 			case Opcodes.CONSTANT_STRING:
 			case Opcodes.CONSTANT_METHOD_TYPE:
-				constants.add(new ReferenceConstant(tag, buf.readShort()));
+				add(new ReferenceConstant(tag, buf.readShort()));
 				break;
 			case Opcodes.CONSTANT_FIELD_REF:
 			case Opcodes.CONSTANT_METHOD_REF:
 			case Opcodes.CONSTANT_INTERFACE_METHOD_REF:
 			case Opcodes.CONSTANT_NAME_AND_TYPE:
 			case Opcodes.CONSTANT_INVOKE_DYNAMIC:
-				constants.add(new WideReferenceConstant(tag, buf.readShort(), buf.readShort()));
+				add(new WideReferenceConstant(tag, buf.readShort(), buf.readShort()));
 				break;
 			case Opcodes.CONSTANT_INTEGER:
 			case Opcodes.CONSTANT_FLOAT:
-				constants.add(new IntegralConstant(tag, buf.readInt()));
+				add(new IntegralConstant(tag, buf.readInt()));
 				break;
 			case Opcodes.CONSTANT_LONG:
 			case Opcodes.CONSTANT_DOUBLE:
-				constants.add(new WideIntegralConstant(tag, buf.readLong()));
+				add(new WideIntegralConstant(tag, buf.readLong()));
 				break;
 			case Opcodes.CONSTANT_METHOD_HANDLE:
-				constants.add(new MethodHandleConstant(tag, buf.readByte(), buf.readShort()));
+				add(new MethodHandleConstant(tag, buf.readByte(), buf.readShort()));
 				break;
 			case Opcodes.CONSTANT_UTF8:
-				constants.add(new Utf8Constant(tag, new String(buf.read(buf.readShort()), StandardCharsets.UTF_8)));
+				add(new Utf8Constant(tag, new String(buf.read(buf.readShort()), StandardCharsets.UTF_8)));
 				break;
 			default:
 				throw new ClassFormatException(Type.MALFORMED);
@@ -110,5 +139,10 @@ public class ConstPool implements ReadWriteable<ByteBuf> {
 			buf.writeByte(constant.getTag());
 			constant.write(buf);
 		}
+	}
+
+	@Override
+	public Iterator<Constant> iterator() {
+		return constants.iterator();
 	}
 }

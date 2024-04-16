@@ -1,15 +1,16 @@
 package me.spencernold.jasm.intermediary;
 
-import java.util.LinkedList;
-
 import me.spencernold.jasm.ByteBuf;
 import me.spencernold.jasm.exceptions.ClassFormatException;
 import me.spencernold.jasm.exceptions.ClassFormatException.Type;
-import me.spencernold.jasm.intermediary.attributes.CodeAttribute;
+import me.spencernold.jasm.intermediary.attributes.impl.CodeAttribute;
 import me.spencernold.jasm.intermediary.code.instructions.Instruction;
 import me.spencernold.jasm.intermediary.constants.Constant;
 import me.spencernold.jasm.intermediary.constants.Utf8Constant;
 import me.spencernold.jasm.intermediary.pools.AttributePool;
+
+import java.util.Collection;
+import java.util.LinkedList;
 
 public class JMethod implements AttributeElement, ReadWriteable<ByteBuf> {
 
@@ -112,7 +113,7 @@ public class JMethod implements AttributeElement, ReadWriteable<ByteBuf> {
 	}
 
 	/**
-	 * Gets a linked list of all of the instructions in this method. Shorthand and
+	 * Gets a linked list of all the instructions in this method. Shorthand and
 	 * functionally equivalent to
 	 * {@code getAttributePool().getAttributeOf(CodeAttribute.class).getInstructions().getCode().getInstructions()}
 	 * 
@@ -120,6 +121,15 @@ public class JMethod implements AttributeElement, ReadWriteable<ByteBuf> {
 	 */
 	public LinkedList<Instruction> getInstructions() {
 		return getAttributePool().getAttributeOf(CodeAttribute.class).getInstructions().getCode().getInstructions();
+	}
+
+	public void setInstructions(Collection<Instruction> instructions) {
+		LinkedList<Instruction> linkedList;
+		if (instructions instanceof LinkedList)
+			linkedList = (LinkedList<Instruction>) instructions;
+		else
+            linkedList = new LinkedList<>(instructions);
+		getAttributePool().getAttributeOf(CodeAttribute.class).getInstructions().getCode().setInstructions(linkedList);
 	}
 
 	@Override

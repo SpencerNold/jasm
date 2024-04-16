@@ -2,6 +2,7 @@ package me.spencernold.jasm.intermediary.code.instructions;
 
 import me.spencernold.jasm.ByteBuf;
 import me.spencernold.jasm.intermediary.ReadWriteable;
+import me.spencernold.jasm.intermediary.pools.ConstPool;
 
 public abstract class Instruction implements ReadWriteable<ByteBuf> {
 	
@@ -18,4 +19,5 @@ public abstract class Instruction implements ReadWriteable<ByteBuf> {
 	public void setWithOffset(int offset) {}
 	
 	public abstract int getSize();
+
 }

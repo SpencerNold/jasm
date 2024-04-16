@@ -1,10 +1,11 @@
 package me.spencernold.jasm.intermediary.code;
 
-import java.util.LinkedList;
-
 import me.spencernold.jasm.ByteBuf;
 import me.spencernold.jasm.intermediary.ReadWriteable;
 import me.spencernold.jasm.intermediary.code.instructions.Instruction;
+
+import java.util.Iterator;
+import java.util.LinkedList;
 
 /**
  * Reader and Writer for encoding and decoding JVM instructions
@@ -13,9 +14,9 @@ import me.spencernold.jasm.intermediary.code.instructions.Instruction;
  * @since 1.0.0
  *
  */
-public class Code implements ReadWriteable<ByteBuf> {
+public class Code implements ReadWriteable<ByteBuf>, Iterable<Instruction> {
 
-	private final LinkedList<Instruction> instructions = new LinkedList<>();
+	private LinkedList<Instruction> instructions = new LinkedList<>();
 	private final InsnEncoder decoder = new InsnEncoder();
 
 	/**
@@ -32,6 +33,10 @@ public class Code implements ReadWriteable<ByteBuf> {
 		return instructions;
 	}
 
+	public void setInstructions(LinkedList<Instruction> instructions) {
+		this.instructions = instructions == null ? new LinkedList<>() : instructions;
+	}
+
 	@Override
 	public void read(ByteBuf buf) {
 		while (!buf.isEmpty())
@@ -42,5 +47,10 @@ public class Code implements ReadWriteable<ByteBuf> {
 	public void write(ByteBuf buf) {
 		for (Instruction insn : instructions)
 			decoder.encode(buf, insn);
+	}
+
+	@Override
+	public Iterator<Instruction> iterator() {
+		return instructions.iterator();
 	}
 }

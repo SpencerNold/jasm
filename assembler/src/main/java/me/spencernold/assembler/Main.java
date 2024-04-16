@@ -1,31 +1,32 @@
 package me.spencernold.assembler;
 
-import java.io.File;
+import me.spencernold.assembler.options.OptionContext;
+import me.spencernold.assembler.options.OptionParser;
+import me.spencernold.assembler.options.impl.IntegerOptionType;
+import me.spencernold.assembler.writer.AssemblyWriter;
+import me.spencernold.assembler.writer.StringWriter;
+import me.spencernold.jasm.ClassReader;
+import me.spencernold.jasm.intermediary.JClass;
 
-import me.spencernold.assembler.parser.JParser;
+import java.io.File;
+import java.io.IOException;
 
 public class Main {
 
 	public static void main(String[] args) {
-		for (String s : args) {
-			if (!(s.endsWith(".class") || s.endsWith(".jasm")))
-				error("please only input .class files and/or .jasm files");
-			File file = new File(s);
-			if (!file.exists())
-				error("\"%s\" must exist for JASM to run", s);
-			if (s.endsWith(".class")) {
-				JParser parser = new JParser();
-				parser.read(file);
-				parser.write(new ObjectWriter(System.out));
-			} else if (s.endsWith(".jasm")) {
-				
-			}
+		OptionParser parser = new OptionParser(args);
+		parser.register("tab", IntegerOptionType.class);
+		OptionContext context = parser.parse();
+		try {
+			ClassReader reader = new ClassReader(new File("/Users/spencernold/Test.class"));
+			JClass jclass = reader.read();
+
+			StringWriter string = new StringWriter(context);
+			AssemblyWriter writer = new AssemblyWriter(jclass);
+			writer.write(string);
+			System.out.println(string);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
 		}
-	}
-	
-	// TODO Move this to some sort of logger class
-	public static void error(String format, Object... args) {
-		System.err.println(String.format(format, args));
-		System.exit(1);
 	}
 }
