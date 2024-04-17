@@ -88,8 +88,18 @@ public final class Opcodes {
 	public static final String ATTR_RUNTIME_INVISIBLE_ANNOTATIONS = "RuntimeInvisibleAnnotations";
 	public static final String ATTR_RUNTIME_VISIBLE_PARAMETER_ANNOTATIONS = "RuntimeVisibleParameterAnnotations";
 	public static final String ATTR_RUNTIME_INVISIBLE_PARAMETER_ANNOTATIONS = "RuntimeInvisibleParameterAnnotations";
+	public static final String ATTR_RUNTIME_VISIBLE_TYPE_ANNOTATIONS = "RuntimeVisibleTypeAnnotations";
+	public static final String ATTR_RUNTIME_INVISIBLE_TYPE_ANNOTATIONS = "RuntimeInvisibleTypeAnnotations";
 	public static final String ATTR_ANNOTATION_DEFAULT = "AnnotationDefault";
 	public static final String ATTR_BOOTSTRAP_METHODS = "BootstrapMethods";
+	public static final String ATTR_METHOD_PARAMETERS = "MethodParameters";
+	public static final String ATTR_MODULE = "Module";
+	public static final String ATTR_MODULE_PACKAGES = "ModulePackages";
+	public static final String ATTR_MODULE_MAIN_CLASS = "ModuleMainClass";
+	public static final String ATTR_NEST_HOST = "NestHost";
+	public static final String ATTR_NEST_MEMBERS = "NestMembers";
+	public static final String ATTR_RECORD = "Record";
+	public static final String ATTR_PERMITTED_SUBCLASSES = "PermittedSubclasses";
 
 
 	// Instructions

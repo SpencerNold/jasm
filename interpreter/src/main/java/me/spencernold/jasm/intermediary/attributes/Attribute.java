@@ -153,12 +153,47 @@ public class Attribute implements ReadWriteable<ByteBuf> {
             case Opcodes.ATTR_RUNTIME_INVISIBLE_ANNOTATIONS:
                 body = new RuntimeInvisibleAnnotationsAttribute();
                 break;
-            // TODO TypeAnnotations...
+            case Opcodes.ATTR_RUNTIME_VISIBLE_PARAMETER_ANNOTATIONS:
+                body = new RuntimeVisibleParameterAnnotationsAttribute();
+                break;
+            case Opcodes.ATTR_RUNTIME_INVISIBLE_PARAMETER_ANNOTATIONS:
+                body = new RuntimeInvisileParameterAnnotationsAttribute();
+                break;
+            case Opcodes.ATTR_RUNTIME_VISIBLE_TYPE_ANNOTATIONS:
+                body = new RuntimeVisibleTypeAnnotationsAttribute();
+                break;
+            case Opcodes.ATTR_RUNTIME_INVISIBLE_TYPE_ANNOTATIONS:
+                body = new RuntimeInvisibleTypeAnnotationsAttribute();
+                break;
             case Opcodes.ATTR_ANNOTATION_DEFAULT:
                 body = new AnnotationDefaultAttribute();
                 break;
             case Opcodes.ATTR_BOOTSTRAP_METHODS:
                 body = new BootstrapMethodsAttribute();
+                break;
+            case Opcodes.ATTR_METHOD_PARAMETERS:
+                body = new MethodParametersAttribute();
+                break;
+            case Opcodes.ATTR_MODULE:
+                body = new ModuleAttribute();
+                break;
+            case Opcodes.ATTR_MODULE_PACKAGES:
+                body = new ModulePackagesAttribute();
+                break;
+            case Opcodes.ATTR_MODULE_MAIN_CLASS:
+                body = new ModuleMainClassAttribute();
+                break;
+            case Opcodes.ATTR_NEST_HOST:
+                body = new NestHostAttribute();
+                break;
+            case Opcodes.ATTR_NEST_MEMBERS:
+                body = new NestMembersAttribute();
+                break;
+            case Opcodes.ATTR_RECORD:
+                body = new RecordAttribute(jclass);
+                break;
+            case Opcodes.ATTR_PERMITTED_SUBCLASSES:
+                body = new PermittedSubclassesAttribute();
                 break;
             default:
                 body = new GenericBody();
