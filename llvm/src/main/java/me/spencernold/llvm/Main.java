@@ -1,6 +1,5 @@
 package me.spencernold.llvm;
 
-import com.sun.jna.Native;
 import me.spencernold.jasm.logger.Logger;
 import me.spencernold.jasm.logger.SystemLogger;
 import me.spencernold.jasm.options.OptionContext;
@@ -21,6 +20,13 @@ public class Main {
     private static final Logger LOGGER = SystemLogger.getInstance();
 
     public static void main(String[] args) throws IOException {
+        boolean b = true;
+        if (b) {
+            LLVM llvm = new LLVM();
+            llvm.print();
+            return;
+        }
+
         // THE PLAN!
         // load a bunch of jars to "classpath" (not the real classpath, a fake one)
         // from those, load all classes into a map, and find manifest files, reading them
@@ -48,14 +54,9 @@ public class Main {
             return;
         }
         String libName = context.hasOption("lib") ? context.getAsString("lib") : "LLVM-16";
-        LLVM llvm = null;
-        try {
-            llvm = Native.load(libName, LLVM.class);
-        } catch (UnsatisfiedLinkError e) {
-            System.out.println(System.getProperty("jna.library.path"));
-            LOGGER.error("UnsatisfiedLink: LLVM not found in the context, please ensure that LLVM-16 is installed");
-            e.printStackTrace();
-        }
+
+        // TODO
+
         File[] files = context.getArgumentsAsFiles();
         JavaCompiler compiler = new JavaCompiler();
         JarReader runtimeJarReader = new JarReader(rt);

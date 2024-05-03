@@ -1,6 +1,10 @@
 package me.spencernold.llvm.binding;
 
-import com.sun.jna.Library;
+public class LLVM {
 
-public interface LLVM extends Library {
+    static {
+        System.loadLibrary("llvm");
+    }
+
+    public native void print();
 }
