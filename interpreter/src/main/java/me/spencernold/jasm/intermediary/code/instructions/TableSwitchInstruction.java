@@ -54,7 +54,9 @@ public class TableSwitchInstruction extends Instruction {
 	
 	@Override
 	public void setWithOffset(int offset) {
+		System.out.println(offset);
 		padding = (4 - (offset % 4)) % 4;
+		System.out.println("Padding: " + padding);
 	}
 
 	@Override
@@ -63,6 +65,9 @@ public class TableSwitchInstruction extends Instruction {
 		def = buf.readInt();
 		low = buf.readInt();
 		high = buf.readInt();
+		System.out.println("Def " + def);
+		System.out.println("Low " + low);
+		System.out.println("High " + high);
 		int size = high - low + 1;
 		offsets = new int[size];
 		for (int i = 0; i < size; i++)

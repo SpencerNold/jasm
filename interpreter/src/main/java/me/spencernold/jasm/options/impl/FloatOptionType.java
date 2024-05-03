@@ -1,6 +1,6 @@
-package me.spencernold.assembler.options.impl;
+package me.spencernold.jasm.options.impl;
 
-import me.spencernold.assembler.options.Option;
+import me.spencernold.jasm.options.Option;
 
 public class FloatOptionType extends Option<Float> {
 

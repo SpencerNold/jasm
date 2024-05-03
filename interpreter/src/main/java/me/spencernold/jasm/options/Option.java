@@ -1,4 +1,4 @@
-package me.spencernold.assembler.options;
+package me.spencernold.jasm.options;
 
 public abstract class Option<T> {
 

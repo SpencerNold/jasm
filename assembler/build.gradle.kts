@@ -1,8 +1,6 @@
 plugins {
-	idea
-	eclipse
-	java
 	application
+	java
 }
 
 repositories {

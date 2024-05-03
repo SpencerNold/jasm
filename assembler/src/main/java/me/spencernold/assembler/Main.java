@@ -1,8 +1,8 @@
 package me.spencernold.assembler;
 
-import me.spencernold.assembler.options.OptionContext;
-import me.spencernold.assembler.options.OptionParser;
-import me.spencernold.assembler.options.impl.IntegerOptionType;
+import me.spencernold.jasm.options.OptionContext;
+import me.spencernold.jasm.options.OptionParser;
+import me.spencernold.jasm.options.impl.IntegerOptionType;
 import me.spencernold.assembler.writer.AssemblyWriter;
 import me.spencernold.assembler.writer.StringWriter;
 import me.spencernold.jasm.ClassReader;

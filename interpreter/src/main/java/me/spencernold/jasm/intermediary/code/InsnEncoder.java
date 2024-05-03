@@ -1,27 +1,15 @@
 package me.spencernold.jasm.intermediary.code;
 
+import me.spencernold.jasm.ByteBuf;
+import me.spencernold.jasm.DynamicByteBuf;
+import me.spencernold.jasm.Opcodes;
+import me.spencernold.jasm.intermediary.code.instructions.*;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
-
-import me.spencernold.jasm.ByteBuf;
-import me.spencernold.jasm.Opcodes;
-import me.spencernold.jasm.intermediary.code.instructions.ControlFlowInstruction;
-import me.spencernold.jasm.intermediary.code.instructions.GenericInstruction;
-import me.spencernold.jasm.intermediary.code.instructions.IncrementInstruction;
-import me.spencernold.jasm.intermediary.code.instructions.Instruction;
-import me.spencernold.jasm.intermediary.code.instructions.LookupSwitchInstruction;
-import me.spencernold.jasm.intermediary.code.instructions.NewArrayInstruction;
-import me.spencernold.jasm.intermediary.code.instructions.NewMultiArrayInstruction;
-import me.spencernold.jasm.intermediary.code.instructions.PushInstruction;
-import me.spencernold.jasm.intermediary.code.instructions.ReferenceInstruction;
-import me.spencernold.jasm.intermediary.code.instructions.TableSwitchInstruction;
-import me.spencernold.jasm.intermediary.code.instructions.VarInstruction;
-import me.spencernold.jasm.intermediary.code.instructions.WideControlFlowInstruction;
-import me.spencernold.jasm.intermediary.code.instructions.WideInstruction;
-import me.spencernold.jasm.intermediary.code.instructions.WideVarInstruction;
 
 public class InsnEncoder {
 
@@ -106,10 +94,9 @@ public class InsnEncoder {
 	 */
 	public Instruction decode(ByteBuf buf) {
 		int opcode = buf.readByte();
-		offset++;
 		Function<ByteBuf, Instruction> decoder = decoders.getOrDefault(opcode, getGenericDecoder(opcode));
 		Instruction instruction = decoder.apply(buf);
-		offset += instruction.getSize();
+		offset = ((DynamicByteBuf) buf).getPointer() + 1;
 		return instruction;
 	}
 

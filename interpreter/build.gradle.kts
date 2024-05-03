@@ -1,8 +1,7 @@
 plugins {
-	idea
-	eclipse
 	java
 }
+
 repositories {
     mavenCentral()
 }

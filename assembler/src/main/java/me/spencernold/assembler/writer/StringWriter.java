@@ -1,6 +1,6 @@
 package me.spencernold.assembler.writer;
 
-import me.spencernold.assembler.options.OptionContext;
+import me.spencernold.jasm.options.OptionContext;
 
 public class StringWriter {
 

@@ -39,8 +39,10 @@ public class Code implements ReadWriteable<ByteBuf>, Iterable<Instruction> {
 
 	@Override
 	public void read(ByteBuf buf) {
-		while (!buf.isEmpty())
-			instructions.add(decoder.decode(buf));
+		while (!buf.isEmpty()) {
+			Instruction instruction = decoder.decode(buf);
+			instructions.add(instruction);
+		}
 	}
 
 	@Override

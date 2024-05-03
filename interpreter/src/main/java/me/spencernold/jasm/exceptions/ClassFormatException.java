@@ -10,8 +10,6 @@ package me.spencernold.jasm.exceptions;
  */
 public class ClassFormatException extends RuntimeException {
 
-	private static final long serialVersionUID = -2256809117347200346L;
-
 	/**
 	 * Thrown when the {@code ClassReader} fails to read an input class.
 	 * 
@@ -36,9 +34,9 @@ public class ClassFormatException extends RuntimeException {
 
 		NOT_CLASS("target is not a valid .class file type"), MALFORMED("target class is malformed");
 
-		private String message;
+		private final String message;
 
-		private Type(String message) {
+		Type(String message) {
 			this.message = message;
 		}
 	}

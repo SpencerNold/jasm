@@ -10,3 +10,4 @@ rootProject.name = "jasm"
 
 include("interpreter")
 include("assembler")
+include("llvm")

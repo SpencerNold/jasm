@@ -1,6 +1,6 @@
-package me.spencernold.assembler.options;
+package me.spencernold.jasm.options;
 
-import me.spencernold.assembler.options.impl.FileOptionType;
+import me.spencernold.jasm.options.impl.FileOptionType;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -34,6 +34,10 @@ public class OptionContext {
 
     public File getAsFile(String name) {
         return (File) options.get(name);
+    }
+
+    public File[] getAsFileArray(String name) {
+        return (File[]) options.get(name);
     }
 
     public int getAsInteger(String name) {

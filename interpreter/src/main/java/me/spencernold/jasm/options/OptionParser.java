@@ -1,4 +1,4 @@
-package me.spencernold.assembler.options;
+package me.spencernold.jasm.options;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -32,6 +32,8 @@ public class OptionParser {
     }
 
     public OptionContext parse() {
+        if (arguments.length == 0)
+            return OptionContext.empty();
         HashMap<String, Object> body = new HashMap<>();
         ArrayList<String> flags = new ArrayList<>();
         Pattern pattern = Pattern.compile("--(.+)=(.+)$");
@@ -60,7 +62,7 @@ public class OptionParser {
             } else if (arg.startsWith("-") && arg.length() == 2)
                 flags.add(arg);
         }
-        String[] args = Arrays.copyOfRange(arguments, i, arguments.length);
+        String[] args = Arrays.copyOfRange(arguments, i - 1, arguments.length);
         return new OptionContext(body, flags, args);
     }
 

@@ -119,6 +119,8 @@ public class ConstPool implements ReadWriteable<ByteBuf>, Iterable<Constant> {
 			case Opcodes.CONSTANT_LONG:
 			case Opcodes.CONSTANT_DOUBLE:
 				add(new WideIntegralConstant(tag, buf.readLong()));
+				add(new PlaceholderConstant()); // Both take up 2 constant pool slots
+				i++;
 				break;
 			case Opcodes.CONSTANT_METHOD_HANDLE:
 				add(new MethodHandleConstant(tag, buf.readByte(), buf.readShort()));
