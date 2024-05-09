@@ -1,5 +1,6 @@
 package me.spencernold.llvm;
 
+import com.sun.jna.Native;
 import me.spencernold.jasm.logger.Logger;
 import me.spencernold.jasm.logger.SystemLogger;
 import me.spencernold.jasm.options.OptionContext;
@@ -20,13 +21,6 @@ public class Main {
     private static final Logger LOGGER = SystemLogger.getInstance();
 
     public static void main(String[] args) throws IOException {
-        boolean b = true;
-        if (b) {
-            LLVM llvm = new LLVM();
-            llvm.print();
-            return;
-        }
-
         // THE PLAN!
         // load a bunch of jars to "classpath" (not the real classpath, a fake one)
         // from those, load all classes into a map, and find manifest files, reading them
@@ -55,11 +49,14 @@ public class Main {
         }
         String libName = context.hasOption("lib") ? context.getAsString("lib") : "LLVM-16";
 
-        // TODO
+        System.out.println(System.getProperty("java.home"));
+
+        LLVM llvm = Native.load(libName, LLVM.class);
 
         File[] files = context.getArgumentsAsFiles();
         JavaCompiler compiler = new JavaCompiler();
         JarReader runtimeJarReader = new JarReader(rt);
+
         for (JarElement element : runtimeJarReader)
             compiler.update(element);
         for (File file : files) {

@@ -13,9 +13,10 @@ java {
 
 dependencies {
     implementation(project(":interpreter"))
+    implementation("net.java.dev.jna:jna-platform:5.14.0")
 }
 
 application {
     mainClass.set("me.spencernold.llvm.Main")
-    applicationDefaultJvmArgs = listOf("-Djava.library.path=" + System.getProperty("jni.library.path"))
+    applicationDefaultJvmArgs = listOf("-Djna.library.path=" + System.getProperty("jna.library.path"))
 }
