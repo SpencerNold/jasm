@@ -1,13 +1,14 @@
 package me.spencernold.llvm;
 
-import com.sun.jna.Native;
+import me.spencernold.jasm.ClassReader;
+import me.spencernold.jasm.intermediary.JClass;
 import me.spencernold.jasm.logger.Logger;
 import me.spencernold.jasm.logger.SystemLogger;
 import me.spencernold.jasm.options.OptionContext;
 import me.spencernold.jasm.options.OptionParser;
 import me.spencernold.jasm.options.impl.FileOptionType;
-import me.spencernold.jasm.options.impl.StringOptionType;
 import me.spencernold.llvm.binding.LLVM;
+import me.spencernold.llvm.binding.Module;
 import me.spencernold.llvm.jar.ClassElement;
 import me.spencernold.llvm.jar.JarElement;
 import me.spencernold.llvm.jar.JarReader;
@@ -28,9 +29,16 @@ public class Main {
         // build only necessary classes, etc. (based on constants in the const pools)
         // generate llvm ir from the JClass instances
 
+        ClassReader reader = new ClassReader(new File("/Users/spencernold/Test.class"));
+        JClass jclass = reader.read();
+
+        try (ClassObjectCompiler compiler = new ClassObjectCompiler(jclass)) {
+            compiler.build();
+        }
+
+        /*
         OptionParser parser = new OptionParser(args);
         parser.register("jvm", FileOptionType.class);
-        parser.register("lib", StringOptionType.class);
         OptionContext context = parser.parse();
         String jvmPath = context.hasOption("jvm") ? context.getAsFile("jvm").getAbsolutePath() : System.getProperty("java.home");
         if (jvmPath == null) {
@@ -47,11 +55,6 @@ public class Main {
             LOGGER.error("The JVM present is not valid: %s", jvmPath);
             return;
         }
-        String libName = context.hasOption("lib") ? context.getAsString("lib") : "LLVM-16";
-
-        System.out.println(System.getProperty("java.home"));
-
-        LLVM llvm = Native.load(libName, LLVM.class);
 
         File[] files = context.getArgumentsAsFiles();
         JavaCompiler compiler = new JavaCompiler();
@@ -76,5 +79,6 @@ public class Main {
         }
         runtimeJarReader.close();
         // compiler.compile();
+         */
     }
 }

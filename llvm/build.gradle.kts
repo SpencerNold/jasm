@@ -13,10 +13,17 @@ java {
 
 dependencies {
     implementation(project(":interpreter"))
-    implementation("net.java.dev.jna:jna-platform:5.14.0")
+}
+
+tasks.named("run") {
+    dependsOn(":llvm:llvm-binding:build")
 }
 
 application {
     mainClass.set("me.spencernold.llvm.Main")
-    applicationDefaultJvmArgs = listOf("-Djna.library.path=" + System.getProperty("jna.library.path"))
+
+    val sep = File.separator
+    val buildDir = project(":llvm:llvm-binding").layout.buildDirectory.asFile.get().absolutePath
+
+    applicationDefaultJvmArgs = listOf("-Djava.library.path=${buildDir}${sep}lib${sep}main${sep}debug")
 }

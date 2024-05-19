@@ -28,3 +28,6 @@ out/
 
 # Project
 start.sh
+*.ll
+*.o
+*.log
