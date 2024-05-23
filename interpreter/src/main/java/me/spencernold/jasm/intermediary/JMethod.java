@@ -132,6 +132,14 @@ public class JMethod implements AttributeElement, ReadWriteable<ByteBuf> {
 		getAttributePool().getAttributeOf(CodeAttribute.class).getInstructions().getCode().setInstructions(linkedList);
 	}
 
+	public int getMaxLocals() {
+		return getAttributePool().getAttributeOf(CodeAttribute.class).getMaxLocals();
+	}
+
+	public int getMaxStack() {
+		return getAttributePool().getAttributeOf(CodeAttribute.class).getMaxStack();
+	}
+
 	@Override
 	public void read(ByteBuf buf) {
 		access = buf.readShort();

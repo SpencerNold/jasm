@@ -1,22 +1,21 @@
 package me.spencernold.llvm;
 
 import me.spencernold.jasm.intermediary.JClass;
-import me.spencernold.jasm.intermediary.constants.Constant;
-import me.spencernold.jasm.intermediary.constants.ReferenceConstant;
-import me.spencernold.jasm.intermediary.pools.ConstPool;
 import me.spencernold.llvm.exceptions.PreprocessException;
 import me.spencernold.llvm.jar.ClassElement;
 import me.spencernold.llvm.jar.DirectoryElement;
 import me.spencernold.llvm.jar.JarElement;
 import me.spencernold.llvm.jar.ManifestElement;
 
+import java.io.Closeable;
+import java.io.IOException;
 import java.util.HashMap;
 
-public class JavaCompiler {
+public class JavaCompiler implements Closeable {
 
     private String mainClass = null;
     private final HashMap<String, ClassElement> loadedClassPath = new HashMap<>();
-    private final HashMap<String, JClass> classesToCompile = new HashMap<>();
+    private final HashMap<String, ClassObjectCompiler> preprocessedClasses = new HashMap<>();
 
     public void update(JarElement element) {
         if (element instanceof DirectoryElement)
@@ -35,28 +34,21 @@ public class JavaCompiler {
         mainClass = "Test";
         if (!loadedClassPath.containsKey(mainClass))
             throw new PreprocessException("missing main class: " + mainClass);
-        JClass mainClass = loadedClassPath.get(this.mainClass).read();
-        update(mainClass);
-        System.out.println(classesToCompile.containsKey(this.mainClass));
+        process(mainClass);
+        preprocessedClasses.values().forEach(ClassObjectCompiler::compile);
+        preprocessedClasses.values().forEach(ClassObjectCompiler::build);
+        // Link objects into executable
     }
 
-    private void update(JClass jclass) {
-        ConstPool constPool = jclass.getConstPool();
-        for (Constant constant : constPool) {
-            if (constant.isClass()) {
-                String name = constPool.getStringFromReferenceConstant(constant.getConstPoolIndex());
-                if (classesToCompile.containsKey(name))
-                    continue;
-                if (!loadedClassPath.containsKey(name))
-                    throw new PreprocessException("can not find %s loaded in the class path", name);
-                JClass clazz = null;
-                try {
-                    clazz = loadedClassPath.get(name).read();
-                } catch (Exception e) {
-                    throw new PreprocessException(e);
-                }
-                update(clazz);
-            }
-        }
+    void process(String name) {
+        JClass jclass = loadedClassPath.get(name).read();
+        ClassObjectCompiler classObjectCompiler = new ClassObjectCompiler(this, jclass);
+        classObjectCompiler.process();
+        preprocessedClasses.put(name, classObjectCompiler);
+    }
+
+    @Override
+    public void close() throws IOException {
+        preprocessedClasses.values().forEach(ClassObjectCompiler::close);
     }
 }

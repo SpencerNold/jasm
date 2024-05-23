@@ -5,7 +5,10 @@ import me.spencernold.jasm.intermediary.JClass;
 import me.spencernold.jasm.intermediary.attributes.Body;
 import me.spencernold.jasm.intermediary.code.ExceptionTable;
 import me.spencernold.jasm.intermediary.code.InstructionTable;
+import me.spencernold.jasm.intermediary.code.instructions.Instruction;
 import me.spencernold.jasm.intermediary.pools.AttributePool;
+
+import java.util.Iterator;
 
 /**
  * Attribute class which is referencing the Code of a method.
@@ -14,7 +17,7 @@ import me.spencernold.jasm.intermediary.pools.AttributePool;
  * @since 1.0.0
  * @see me.spencernold.jasm.intermediary.code.Code
  */
-public class CodeAttribute implements Body {
+public class CodeAttribute implements Body, Iterable<Instruction> {
 
 	private int maxStack;
 	private int maxLocals;
@@ -91,6 +94,11 @@ public class CodeAttribute implements Body {
 	 */
 	public AttributePool getAttributePool() {
 		return attributePool;
+	}
+
+	@Override
+	public Iterator<Instruction> iterator() {
+		return getInstructions().getCode().iterator();
 	}
 
 	@Override

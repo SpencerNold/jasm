@@ -111,7 +111,7 @@ public class JField implements AttributeElement, ReadWriteable<ByteBuf> {
 	 * @return true if the attribute pool is not empty, false if it is empty
 	 */
 	public boolean hasAttributes() {
-		return attributePool.getAttributes().size() != 0;
+		return !attributePool.getAttributes().isEmpty();
 	}
 
 	@Override

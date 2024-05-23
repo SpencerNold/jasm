@@ -1,21 +1,19 @@
 package me.spencernold.llvm;
 
-import me.spencernold.jasm.ClassReader;
-import me.spencernold.jasm.intermediary.JClass;
 import me.spencernold.jasm.logger.Logger;
 import me.spencernold.jasm.logger.SystemLogger;
 import me.spencernold.jasm.options.OptionContext;
 import me.spencernold.jasm.options.OptionParser;
 import me.spencernold.jasm.options.impl.FileOptionType;
-import me.spencernold.llvm.binding.LLVM;
-import me.spencernold.llvm.binding.Module;
 import me.spencernold.llvm.jar.ClassElement;
 import me.spencernold.llvm.jar.JarElement;
 import me.spencernold.llvm.jar.JarReader;
+import me.spencernold.llvm.utils.DescriptorTool;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.Iterator;
 
 public class Main {
 
@@ -29,14 +27,6 @@ public class Main {
         // build only necessary classes, etc. (based on constants in the const pools)
         // generate llvm ir from the JClass instances
 
-        ClassReader reader = new ClassReader(new File("/Users/spencernold/Test.class"));
-        JClass jclass = reader.read();
-
-        try (ClassObjectCompiler compiler = new ClassObjectCompiler(jclass)) {
-            compiler.build();
-        }
-
-        /*
         OptionParser parser = new OptionParser(args);
         parser.register("jvm", FileOptionType.class);
         OptionContext context = parser.parse();
@@ -57,28 +47,28 @@ public class Main {
         }
 
         File[] files = context.getArgumentsAsFiles();
-        JavaCompiler compiler = new JavaCompiler();
-        JarReader runtimeJarReader = new JarReader(rt);
 
-        for (JarElement element : runtimeJarReader)
-            compiler.update(element);
-        for (File file : files) {
-            String name = file.getName();
-            if (name.endsWith(".jar")) {
-                JarReader reader =  new JarReader(file);
-                for (JarElement element : reader)
-                    compiler.update(element);
-                reader.close();
-            } else if (name.endsWith(".class")) {
-                byte[] bytes = Files.readAllBytes(file.toPath());
-                ClassElement element = new ClassElement(file.getName(), bytes);
+        try (JavaCompiler compiler = new JavaCompiler()) {
+            JarReader runtimeJarReader = new JarReader(rt);
+            for (JarElement element : runtimeJarReader)
                 compiler.update(element);
-            } else {
-                LOGGER.warn("Unknown classpath element: %s SKIPPING!", file.getName());
+            for (File file : files) {
+                String name = file.getName();
+                if (name.endsWith(".jar")) {
+                    JarReader reader =  new JarReader(file);
+                    for (JarElement element : reader)
+                        compiler.update(element);
+                    reader.close();
+                } else if (name.endsWith(".class")) {
+                    byte[] bytes = Files.readAllBytes(file.toPath());
+                    ClassElement element = new ClassElement(file.getName(), bytes);
+                    compiler.update(element);
+                } else {
+                    LOGGER.warn("Unknown classpath element: %s SKIPPING!", file.getName());
+                }
             }
+            runtimeJarReader.close();
+            compiler.compile();
         }
-        runtimeJarReader.close();
-        // compiler.compile();
-         */
     }
 }
