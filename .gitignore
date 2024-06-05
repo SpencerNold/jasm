@@ -27,7 +27,8 @@ out/
 .DS_Store
 
 # Project
-start.sh
+*.sh
+*.bat
 *.ll
 *.o
 *.log
