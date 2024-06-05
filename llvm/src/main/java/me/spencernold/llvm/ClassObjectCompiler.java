@@ -35,7 +35,7 @@ public class ClassObjectCompiler {
         // Add class fields to the struct
         // Add methods, static methods are just normal functions
         // class methods include an instance of the struct
-        // Recursively add all parent class fields as struct fields, same with methods to flatten out the structure
+        // Recursively addLast all parent class fields as struct fields, same with methods to flatten out the structure
 
         List<Type> fields = new ArrayList<>();
         for (JField field : jclass.getFields())
@@ -51,7 +51,7 @@ public class ClassObjectCompiler {
     }
 
     public void compile() {
-        // add bodies to declared functions in the process phase
+        // addLast bodies to declared functions in the process phase
         for (Pair<JMethod, Function> pair : functions.values()) {
             JMethod method = pair.getKey();
             Function function = pair.getValue();

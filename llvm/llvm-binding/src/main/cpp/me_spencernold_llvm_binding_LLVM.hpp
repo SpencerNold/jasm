@@ -71,6 +71,20 @@ JNIEXPORT jlong JNICALL Java_me_spencernold_llvm_binding_LLVM_llvmGetI64Constant
 
 /*
  * Class:     me_spencernold_llvm_binding_LLVM
+ * Method:    llvmGetF32Constant
+ * Signature: (JI)J
+ */
+JNIEXPORT jlong JNICALL Java_me_spencernold_llvm_binding_LLVM_llvmGetF32Constant(JNIEnv*, jobject, jlong, jfloat);
+
+/*
+ * Class:     me_spencernold_llvm_binding_LLVM
+ * Method:    llvmGetF64Constant
+ * Signature: (JJ)J
+ */
+JNIEXPORT jlong JNICALL Java_me_spencernold_llvm_binding_LLVM_llvmGetF64Constant(JNIEnv*, jobject, jlong, jdouble);
+
+/*
+ * Class:     me_spencernold_llvm_binding_LLVM
  * Method:    llvmAddReturn
  * Signature: (JJ)V
  */
@@ -78,38 +92,115 @@ JNIEXPORT void JNICALL Java_me_spencernold_llvm_binding_LLVM_llvmAddReturn(JNIEn
 
 /*
  * Class:     me_spencernold_llvm_binding_LLVM
- * Method:    llvmAllocateI32
- * Signature: (J)J
- */
-JNIEXPORT jlong JNICALL Java_me_spencernold_llvm_binding_LLVM_llvmAllocateI32(JNIEnv*, jobject, jlong);
-
-/*
- * Class:     me_spencernold_llvm_binding_LLVM
- * Method:    llvmAllocateI64
- * Signature: (J)J
- */
-JNIEXPORT jlong JNICALL Java_me_spencernold_llvm_binding_LLVM_llvmAllocateI64(JNIEnv*, jobject, jlong);
-
-/*
- * Class:     me_spencernold_llvm_binding_LLVM
- * Method:    llvmStoreI32
- * Signature: (JJJ)V
- */
-JNIEXPORT void JNICALL Java_me_spencernold_llvm_binding_LLVM_llvmStoreI32(JNIEnv*, jobject, jlong, jlong, jlong);
-
-/*
- * Class:     me_spencernold_llvm_binding_LLVM
- * Method:    llvmLoadI32
+ * Method:    llvmAllocate
  * Signature: (JJ)J
  */
-JNIEXPORT jlong JNICALL Java_me_spencernold_llvm_binding_LLVM_llvmLoadI32(JNIEnv*, jobject, jlong, jlong);
+JNIEXPORT jlong JNICALL Java_me_spencernold_llvm_binding_LLVM_llvmAllocate(JNIEnv*, jobject, jlong, jlong);
+
+/*
+ * Class:     me_spencernold_llvm_binding_LLVM
+ * Method:    llvmStore
+ * Signature: (JJJ)V
+ */
+JNIEXPORT void JNICALL Java_me_spencernold_llvm_binding_LLVM_llvmStore(JNIEnv*, jobject, jlong, jlong, jlong);
+
+/*
+ * Class:     me_spencernold_llvm_binding_LLVM
+ * Method:    llvmLoad
+ * Signature: (JJJ)J
+ */
+JNIEXPORT jlong JNICALL Java_me_spencernold_llvm_binding_LLVM_llvmLoad(JNIEnv*, jobject, jlong, jlong, jlong);
+
+/*
+ * Class:     me_spencernold_llvm_binding_LLVM
+ * Method:    llvmAddFloatingPointAdd
+ * Signature: (JJJ)J
+ */
+JNIEXPORT jlong JNICALL Java_me_spencernold_llvm_binding_LLVM_llvmAddFloatingPointAdd(JNIEnv*, jobject, jlong, jlong, jlong);
+
+/*
+ * Class:     me_spencernold_llvm_binding_LLVM
+ * Method:    llvmAddFloatingPointSubtract
+ * Signature: (JJJ)J
+ */
+JNIEXPORT jlong JNICALL Java_me_spencernold_llvm_binding_LLVM_llvmAddFloatingPointSubtract(JNIEnv*, jobject, jlong, jlong, jlong);
+
+/*
+ * Class:     me_spencernold_llvm_binding_LLVM
+ * Method:    llvmAddFloatingPointDivide
+ * Signature: (JJJ)J
+ */
+JNIEXPORT jlong JNICALL Java_me_spencernold_llvm_binding_LLVM_llvmAddFloatingPointDivide(JNIEnv*, jobject, jlong, jlong, jlong);
+
+/*
+ * Class:     me_spencernold_llvm_binding_LLVM
+ * Method:    llvmAddFloatingPointModulus
+ * Signature: (JJJ)J
+ */
+JNIEXPORT jlong JNICALL Java_me_spencernold_llvm_binding_LLVM_llvmAddFloatingPointModulus(JNIEnv*, jobject, jlong, jlong, jlong);
+
+/*
+ * Class:     me_spencernold_llvm_binding_LLVM
+ * Method:    llvmAddFloatingPointMultiply
+ * Signature: (JJJ)J
+ */
+JNIEXPORT jlong JNICALL Java_me_spencernold_llvm_binding_LLVM_llvmAddFloatingPointMultiply(JNIEnv*, jobject, jlong, jlong, jlong);
+
+/*
+ * Class:     me_spencernold_llvm_binding_LLVM
+ * Method:    llvmAddFloatingPointNegate
+ * Signature: (JJ)J
+ */
+JNIEXPORT jlong JNICALL Java_me_spencernold_llvm_binding_LLVM_llvmAddFloatingPointNegate(JNIEnv*, jobject, jlong, jlong);
+
+/*
+ * Class:     me_spencernold_llvm_binding_LLVM
+ * Method:    llvmAddD2FCast
+ * Signature: (JJ)J
+ */
+JNIEXPORT jlong JNICALL Java_me_spencernold_llvm_binding_LLVM_llvmAddD2FCast(JNIEnv*, jobject, jlong, jlong);
+
+/*
+ * Class:     me_spencernold_llvm_binding_LLVM
+ * Method:    llvmAddF2DCast
+ * Signature: (JJ)J
+ */
+JNIEXPORT jlong JNICALL Java_me_spencernold_llvm_binding_LLVM_llvmAddF2DCast(JNIEnv*, jobject, jlong, jlong);
+
+/*
+ * Class:     me_spencernold_llvm_binding_LLVM
+ * Method:    llvmAddF2ICast
+ * Signature: (JJ)J
+ */
+JNIEXPORT jlong JNICALL Java_me_spencernold_llvm_binding_LLVM_llvmAddF2ICast(JNIEnv*, jobject, jlong, jlong);
+
+/*
+ * Class:     me_spencernold_llvm_binding_LLVM
+ * Method:    llvmAddF2LCast
+ * Signature: (JJ)J
+ */
+JNIEXPORT jlong JNICALL Java_me_spencernold_llvm_binding_LLVM_llvmAddF2LCast(JNIEnv*, jobject, jlong, jlong);
+
+/*
+ * Class:     me_spencernold_llvm_binding_LLVM
+ * Method:    llvmAddD2LCast
+ * Signature: (JJ)J
+ */
+JNIEXPORT jlong JNICALL Java_me_spencernold_llvm_binding_LLVM_llvmAddD2LCast(JNIEnv*, jobject, jlong, jlong);
+
+/*
+ * Class:     me_spencernold_llvm_binding_LLVM
+ * Method:    llvmAddD2ICast
+ * Signature: (JJ)J
+ */
+JNIEXPORT jlong JNICALL Java_me_spencernold_llvm_binding_LLVM_llvmAddD2ICast(JNIEnv*, jobject, jlong, jlong);
 
 /*
  * Class:     me_spencernold_llvm_binding_LLVM
  * Method:    llvmFinishFunction
- * Signature: (J)V
+ * Signature: (J)Z
  */
-JNIEXPORT void JNICALL Java_me_spencernold_llvm_binding_LLVM_llvmFinishFunction(JNIEnv*, jobject, jlong);
+JNIEXPORT jboolean JNICALL Java_me_spencernold_llvm_binding_LLVM_llvmFinishFunction(JNIEnv*, jobject, jlong);
 
 /*
  * Class:     me_spencernold_llvm_binding_LLVM

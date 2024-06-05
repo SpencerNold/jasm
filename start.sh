@@ -1,2 +1,2 @@
 #!/bin/zsh
-./gradlew :llvm:run -Djna.library.path=`llvm-config --libdir`
+./gradlew :llvm:run --args="/Users/spencernold/Test.class"

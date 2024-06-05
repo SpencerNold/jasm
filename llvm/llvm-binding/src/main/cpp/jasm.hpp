@@ -54,12 +54,25 @@ namespace jasm {
             void addFunctionBody();
 
             llvm::Value* getArgument(uint32_t);
-            llvm::AllocaInst* allocateI32();
-            llvm::AllocaInst* allocateI64();
-            void storeI32(llvm::AllocaInst*, llvm::Value*);
-            llvm::LoadInst* loadI32(llvm::AllocaInst*);
+            llvm::AllocaInst* allocate(llvm::Type*);
+            void store(llvm::AllocaInst*, llvm::Value*);
+            llvm::LoadInst* load(llvm::Type*, llvm::AllocaInst*);
 
             void addReturn(llvm::Value*);
+
+            llvm::Value* addFloatingPointAdd(llvm::Value*, llvm::Value*);
+            llvm::Value* addFloatingPointSubtract(llvm::Value*, llvm::Value*);
+            llvm::Value* addFloatingPointDivide(llvm::Value*, llvm::Value*);
+            llvm::Value* addFloatingPointModulus(llvm::Value*, llvm::Value*);
+            llvm::Value* addFloatingPointMultiply(llvm::Value*, llvm::Value*);
+            llvm::Value* addFloatingPointNegate(llvm::Value*);
+
+            llvm::Value* addDoubleToFloatCast(llvm::Value*);
+            llvm::Value* addDoubleToLongCast(llvm::Value*);
+            llvm::Value* addDoubleToIntCast(llvm::Value*);
+            llvm::Value* addFloatToDoubleCast(llvm::Value*);
+            llvm::Value* addFloatToIntCast(llvm::Value*);
+            llvm::Value* addFloatToLongCast(llvm::Value*);
 
             bool finish();
     };
@@ -67,5 +80,7 @@ namespace jasm {
     namespace value {
         llvm::Value* getI32Const(llvm::IRBuilder<>*, int32_t);
         llvm::Value* getI64Const(llvm::IRBuilder<>*, int64_t);
+        llvm::Value* getF32Const(llvm::IRBuilder<>*, float);
+        llvm::Value* getF64Const(llvm::IRBuilder<>*, double);
     }
 }

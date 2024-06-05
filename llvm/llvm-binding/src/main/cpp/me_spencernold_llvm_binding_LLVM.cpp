@@ -81,38 +81,107 @@ JNIEXPORT jlong JNICALL Java_me_spencernold_llvm_binding_LLVM_llvmGetI64Constant
     return (jlong) value;
 }
 
+JNIEXPORT jlong JNICALL Java_me_spencernold_llvm_binding_LLVM_llvmGetF32Constant(JNIEnv* env, jobject object, jlong address, jfloat val) {
+    jasm::Module* module = (jasm::Module*) address;
+    llvm::Value* value = jasm::value::getF32Const(module->builder.get(), (float) val);
+    return (jlong) value;
+}
+
+JNIEXPORT jlong JNICALL Java_me_spencernold_llvm_binding_LLVM_llvmGetF64Constant(JNIEnv* env, jobject object, jlong address, jdouble val) {
+    jasm::Module* module = (jasm::Module*) address;
+    llvm::Value* value = jasm::value::getF64Const(module->builder.get(), (double) val);
+    return (jlong) value;
+}
+
 JNIEXPORT void JNICALL Java_me_spencernold_llvm_binding_LLVM_llvmAddReturn(JNIEnv* env, jobject object, jlong address, jlong value) {
     jasm::Function* function = (jasm::Function*) address;
     function->addReturn((llvm::Value*) value);
 }
 
-JNIEXPORT jlong JNICALL Java_me_spencernold_llvm_binding_LLVM_llvmAllocateI32(JNIEnv* env, jobject object, jlong address) {
+JNIEXPORT jlong JNICALL Java_me_spencernold_llvm_binding_LLVM_llvmAllocate(JNIEnv* env, jobject object, jlong address, jlong type) {
     jasm::Function* function = (jasm::Function*) address;
-    return (jlong) function->allocateI32();
+    return (jlong) function->allocate((llvm::Type*) type);
 }
 
-JNIEXPORT jlong JNICALL Java_me_spencernold_llvm_binding_LLVM_llvmAllocateI64(JNIEnv* env, jobject object, jlong address) {
+JNIEXPORT void JNICALL Java_me_spencernold_llvm_binding_LLVM_llvmStore(JNIEnv* env, jobject object, jlong address, jlong ptr, jlong value) {
     jasm::Function* function = (jasm::Function*) address;
-    return (jlong) function->allocateI64();
+    function->store((llvm::AllocaInst*) ptr, (llvm::Value*) value);
 }
 
-JNIEXPORT void JNICALL Java_me_spencernold_llvm_binding_LLVM_llvmStoreI32(JNIEnv* env, jobject object, jlong address, jlong ptr, jlong val) {
+JNIEXPORT jlong JNICALL Java_me_spencernold_llvm_binding_LLVM_llvmLoad(JNIEnv* env, jobject object, jlong address, jlong type, jlong ptr) {
     jasm::Function* function = (jasm::Function*) address;
-    llvm::AllocaInst* pointer = (llvm::AllocaInst*) ptr;
+    return (jlong) function->load((llvm::Type*) type, (llvm::AllocaInst*) ptr);
+}
+
+JNIEXPORT jlong JNICALL Java_me_spencernold_llvm_binding_LLVM_llvmAddFloatingPointAdd(JNIEnv* env, jobject object, jlong address, jlong val1, jlong val2) {
+    jasm::Function* function = (jasm::Function*) address;
+    return (jlong) function->addFloatingPointAdd((llvm::Value*) val1, (llvm::Value*) val2);
+}
+
+JNIEXPORT jlong JNICALL Java_me_spencernold_llvm_binding_LLVM_llvmAddFloatingPointSubtract(JNIEnv* env, jobject object, jlong address, jlong val1, jlong val2) {
+    jasm::Function* function = (jasm::Function*) address;
+    return (jlong) function->addFloatingPointSubtract((llvm::Value*) val1, (llvm::Value*) val2);
+}
+
+JNIEXPORT jlong JNICALL Java_me_spencernold_llvm_binding_LLVM_llvmAddFloatingPointDivide(JNIEnv* env, jobject object, jlong address, jlong val1, jlong val2) {
+    jasm::Function* function = (jasm::Function*) address;
+    return (jlong) function->addFloatingPointDivide((llvm::Value*) val1, (llvm::Value*) val2);
+}
+
+JNIEXPORT jlong JNICALL Java_me_spencernold_llvm_binding_LLVM_llvmAddFloatingPointModulus(JNIEnv* env, jobject object, jlong address, jlong val1, jlong val2) {
+    jasm::Function* function = (jasm::Function*) address;
+    return (jlong) function->addFloatingPointModulus((llvm::Value*) val1, (llvm::Value*) val2);
+}
+
+JNIEXPORT jlong JNICALL Java_me_spencernold_llvm_binding_LLVM_llvmAddFloatingPointMultiply(JNIEnv* env, jobject object, jlong address, jlong val1, jlong val2) {
+    jasm::Function* function = (jasm::Function*) address;
+    return (jlong) function->addFloatingPointMultiply((llvm::Value*) val1, (llvm::Value*) val2);
+}
+
+JNIEXPORT jlong JNICALL Java_me_spencernold_llvm_binding_LLVM_llvmAddFloatingPointNegate(JNIEnv* env, jobject object, jlong address, jlong value) {
+    jasm::Function* function = (jasm::Function*) address;
+    return (jlong) function->addFloatingPointNegate((llvm::Value*) value);
+}
+
+JNIEXPORT jlong JNICALL Java_me_spencernold_llvm_binding_LLVM_llvmAddD2FCast(JNIEnv* env, jobject object, jlong address, jlong val) {
+    jasm::Function* function = (jasm::Function*) address;
     llvm::Value* value = (llvm::Value*) val;
-    function->storeI32(pointer, value);
+    return (jlong) function->addDoubleToFloatCast(value);
 }
 
-JNIEXPORT jlong JNICALL Java_me_spencernold_llvm_binding_LLVM_llvmLoadI32(JNIEnv* env, jobject object, jlong address, jlong ptr) {
+JNIEXPORT jlong JNICALL Java_me_spencernold_llvm_binding_LLVM_llvmAddD2LCast(JNIEnv* env, jobject object, jlong address, jlong val) {
     jasm::Function* function = (jasm::Function*) address;
-    llvm::AllocaInst* pointer = (llvm::AllocaInst*) ptr;
-    return (jlong) function->loadI32(pointer);
+    llvm::Value* value = (llvm::Value*) val;
+    return (jlong) function->addDoubleToLongCast(value);
 }
 
-JNIEXPORT void JNICALL Java_me_spencernold_llvm_binding_LLVM_llvmFinishFunction(JNIEnv* env, jobject object, jlong address) {
+JNIEXPORT jlong JNICALL Java_me_spencernold_llvm_binding_LLVM_llvmAddD2ICast(JNIEnv* env, jobject object, jlong address, jlong val) {
     jasm::Function* function = (jasm::Function*) address;
-    bool verify = function->finish();
-    std::cout << function->name << ": " << (verify == 0 ? "success" : "error") << std::endl;
+    llvm::Value* value = (llvm::Value*) val;
+    return (jlong) function->addDoubleToIntCast(value);
+}
+
+JNIEXPORT jlong JNICALL Java_me_spencernold_llvm_binding_LLVM_llvmAddF2DCast(JNIEnv* env, jobject object, jlong address, jlong val) {
+    jasm::Function* function = (jasm::Function*) address;
+    llvm::Value* value = (llvm::Value*) val;
+    return (jlong) function->addFloatToDoubleCast(value);
+}
+
+JNIEXPORT jlong JNICALL Java_me_spencernold_llvm_binding_LLVM_llvmAddF2ICast(JNIEnv* env, jobject object, jlong address, jlong val) {
+    jasm::Function* function = (jasm::Function*) address;
+    llvm::Value* value = (llvm::Value*) val;
+    return (jlong) function->addFloatToIntCast(value);
+}
+
+JNIEXPORT jlong JNICALL Java_me_spencernold_llvm_binding_LLVM_llvmAddF2LCast(JNIEnv* env, jobject object, jlong address, jlong val) {
+    jasm::Function* function = (jasm::Function*) address;
+    llvm::Value* value = (llvm::Value*) val;
+    return (jlong) function->addFloatToLongCast(value);
+}
+
+JNIEXPORT jboolean JNICALL Java_me_spencernold_llvm_binding_LLVM_llvmFinishFunction(JNIEnv* env, jobject object, jlong address) {
+    jasm::Function* function = (jasm::Function*) address;
+    return (jboolean) function->finish();
 }
 
 JNIEXPORT void JNICALL Java_me_spencernold_llvm_binding_LLVM_llvmWriteModule(JNIEnv* env, jobject object, jlong address) {

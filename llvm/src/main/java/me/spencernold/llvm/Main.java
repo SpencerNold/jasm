@@ -8,12 +8,10 @@ import me.spencernold.jasm.options.impl.FileOptionType;
 import me.spencernold.llvm.jar.ClassElement;
 import me.spencernold.llvm.jar.JarElement;
 import me.spencernold.llvm.jar.JarReader;
-import me.spencernold.llvm.utils.DescriptorTool;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.Iterator;
 
 public class Main {
 
@@ -32,7 +30,7 @@ public class Main {
         OptionContext context = parser.parse();
         String jvmPath = context.hasOption("jvm") ? context.getAsFile("jvm").getAbsolutePath() : System.getProperty("java.home");
         if (jvmPath == null) {
-            LOGGER.error("No valid JVM found, please use the --jvm argument or add a JAVA_HOME variable");
+            LOGGER.error("No valid JVM found, please use the --jvm argument or addLast a JAVA_HOME variable");
             return;
         }
         File jvm = new File(jvmPath, "lib");
@@ -45,9 +43,7 @@ public class Main {
             LOGGER.error("The JVM present is not valid: %s", jvmPath);
             return;
         }
-
         File[] files = context.getArgumentsAsFiles();
-
         try (JavaCompiler compiler = new JavaCompiler()) {
             JarReader runtimeJarReader = new JarReader(rt);
             for (JarElement element : runtimeJarReader)

@@ -13,7 +13,7 @@ public final class Module extends LLVM {
     }
 
     public Type getNumericType(NumericType type) {
-        return new Type(llvmGetNumericType(handle, type.ordinal()));
+        return type.type = type.type == null ? new Type(llvmGetNumericType(handle, type.ordinal())) : type.type;
     }
 
     public void setFields(Type[] types) {
@@ -28,7 +28,7 @@ public final class Module extends LLVM {
         for (int i = 0; i < parameters.length; i++)
             parameterHandles[i] = parameters[i].handle;
         long functionHandle = llvmCreateFunction(handle, name, access, type.handle, parameterHandles);
-        return new Function(functionHandle);
+        return new Function(this, functionHandle);
     }
 
     public Value getI32Constant(int value) {
@@ -37,6 +37,14 @@ public final class Module extends LLVM {
 
     public Value getI64Constant(long value) {
         return new Value(llvmGetI64Constant(handle, value));
+    }
+
+    public Value getF32Constant(float value) {
+        return new Value(llvmGetF32Constant(handle, value));
+    }
+
+    public Value getF64Constant(double value) {
+        return new Value(llvmGetF64Constant(handle, value));
     }
 
     public Value getNullValue() {
